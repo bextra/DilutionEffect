@@ -3,14 +3,21 @@
 # K. Beck
 use strict; use warnings;
 
-#die "process id is $$";
+#print "process id is $$";
+
 
 ### Make the simulated rep 1-3 P and L ###
-for (my $i = 1; $i < 3; $i++) {
-	simulate_reps ($i); #TO DO: make it only replicate 3 in R script
+for (my $i = 1; $i <= 3; $i++) {
+	simulate_reps ($i);
+	# print `rename 's/PID/$i/g' PID*`;
 	## TO DO: figure out a way to append the file name
+	# maybe transliterate the file name
+	# but how do you know what the name is being renamed
 	
+#	my $A = ($seq) =~ tr/A/A/;
+
 }
+
 # TO DO: transliterate addon to file name to process id
 
 #Store the file name in a list maybe?
@@ -23,7 +30,9 @@ for (my $i = 1; $i < 3; $i++) {
 
 sub simulate_reps{
 	my ($i) = @_;
-
+	## if you don't have the results de-duplicated and in the correct form
+	## then uncomment below, otherwise proceed
+	
 	# get Raw Counts from appropriate samples
 	# Two columns: GeneID \t Count
 	# R --no-save --no-restore < select_samples.R
@@ -37,20 +46,14 @@ sub simulate_reps{
 	
 	#sed 's/NA/0/' pcounts.txt > pcounts_Results.txt
 	#sed 's/NA/0/' lcounts.txt > lcounts_Results.txt
-	
-	# Use R script to generate replicates: simulate_reps.R
-	# For each gene, generate two additional replicates using a poisson distribution with lambda=Count
 
 	# fill in for code directory where simulate scripts exist	
 	my $code_dir = "/Users/kristenspencer/Work/Code/Milk/Simulate1000K_Code";
 
-	
 	print `sed 's/SAMPLE/pcounts/g' $code_dir/simulate_reps_GENERIC.R > $code_dir/simulate_reps_pcounts.R`;
 	print `R --no-save --no-restore < $code_dir/simulate_reps_pcounts.R`;
 	print `sed 's/SAMPLE/lcounts/g' $code_dir/simulate_reps_GENERIC.R > $code_dir/simulate_reps_lcounts.R`;
 	print `R --no-save --no-restore < $code_dir/simulate_reps_lcounts.R`;
-	
-	print "This is dollar i $i\n";
 
 }
 __END__
@@ -98,3 +101,27 @@ post process
 must be able to deal with NA and NaN from DEseq errors
 
 count the number of genes that have an adj p value less than 0.05
+
+
+
+__END__
+# Stella's rename script
+#!/usr/bin/perl
+
+use strict; use warnings;
+
+my ($file, $del, $rename) = @ARGV;
+die "usage: $0 <file> <rename what from name> <rename to>\n" unless @ARGV >= 2;
+
+my ($keep1, $keep2) = $file =~ /^(.*)$del(.*)$/;
+#print "$file\n$keep1\n$keep2\n";
+
+die "$del does not exists in the file name\n" unless defined($keep1) or defined($keep2);
+$rename = "" if not defined($rename);
+print "new file name: $keep1$rename$keep2\n";
+my $file2 = $keep1 . $rename . $keep2;
+
+my $cmd = "mv $file $file2";
+print "$cmd\n";
+
+system($cmd) == 0 or die "renaming file failed: $!\n";
