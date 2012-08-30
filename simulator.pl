@@ -40,13 +40,17 @@ sub simulate_reps{
 	
 	# Use R script to generate replicates: simulate_reps.R
 	# For each gene, generate two additional replicates using a poisson distribution with lambda=Count
+
+	# fill in for code directory where simulate scripts exist	
+	my $code_dir = "/Users/kristenspencer/Work/Code/Milk/Simulate1000K_Code";
+
 	
-	print `sed 's/SAMPLE/pcounts/g' simulate_reps_GENERIC.R > simulate_reps_pcounts.R`;
-	print `R --no-save --no-restore < simulate_reps_pcounts.R`;
-	print `sed 's/SAMPLE/lcounts/g' simulate_reps_GENERIC.R > simulate_reps_lcounts.R`;
-	print `R --no-save --no-restore < simulate_reps_lcounts.R`;
+	print `sed 's/SAMPLE/pcounts/g' $code_dir/simulate_reps_GENERIC.R > $code_dir/simulate_reps_pcounts.R`;
+	print `R --no-save --no-restore < $code_dir/simulate_reps_pcounts.R`;
+	print `sed 's/SAMPLE/lcounts/g' $code_dir/simulate_reps_GENERIC.R > $code_dir/simulate_reps_lcounts.R`;
+	print `R --no-save --no-restore < $code_dir/simulate_reps_lcounts.R`;
 	
-	print "This is dollar i $i";
+	print "This is dollar i $i\n";
 
 }
 __END__
