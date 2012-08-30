@@ -3,11 +3,11 @@
 # K. Beck
 use strict; use warnings;
 
-die "process id is $$";
+#die "process id is $$";
 
 ### Make the simulated rep 1-3 P and L ###
 for (my $i = 1; $i < 3; $i++) {
-	simulate_reps ($i); #TO DO: make it only replicate 3
+	simulate_reps ($i); #TO DO: make it only replicate 3 in R script
 	## TO DO: figure out a way to append the file name
 	
 }
