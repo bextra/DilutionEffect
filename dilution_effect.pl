@@ -93,9 +93,17 @@ sub adjust_abundance {
 	}
 	
 	printf STDERR "The total expression in low abundance is %.4f\n", $low_abundance_total;
-	die "No values are above set threshold\n" if ($high_abundance_total == 0);
+	
+	if ($high_abundance_total == 0) {
+		# will most likely only be pre-puberty set
+		print "GeneID\tRaw Expression\n";
+		while (my ($gene, $raw_freq) = each %genes_to_frequency) {
+			print "$gene $genes_to_frequency{$gene}\n"
+		}
+		die "No values are above set threshold\n";
+	} else { 
 	printf STDERR "The total expression in high abundance is %.4f\n", $high_abundance_total;
-
+	}
 #calculate dilution proportion and adjustment factor
 	my $dilution_proportion = $high_abundance_total / $total_freq;
 	my $adj_factor = 1/(1-$dilution_proportion);
