@@ -115,7 +115,7 @@ sub adjust_abundance {
 
 #apply dilution factor to genes less than threshold index	
 	my $dil_adjusted_freq;
-	print STDOUT "GeneID\tRaw Expression\tAdjusted Expression\n";
+	print STDOUT "GeneID\tRawExp\tAdjExp\n";
 
 	while (my ($gene, $raw_freq) = each %genes_to_frequency) {
 		if ($raw_freq <= $threshold_index) {
