@@ -17,7 +17,7 @@ while ($line = <>) {
 	my ($gene, $raw_freq, $adj_freq) = split(/\s+/, $line);	
 	if ($filename =~ m/lcounts/i) {
 		$raw_freq = $raw_freq + 1;
-		$adj_freq = $adj_freq + 1;
+		# $adj_freq = $adj_freq + 1; # uncomment for three columned file
 		print "$gene\t$raw_freq\t$adj_freq\n";
 	} 
 	else {
