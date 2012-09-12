@@ -1,7 +1,7 @@
 # R script to select appropriate samples
 
 # prepubertal mammary sample, Grab GeneID and Count
-p <- read.table(file="prepubResults.txt", header=TRUE, sep="\t", stringsAsFactors=FALSE)
+p <- read.table(file="/Users/kristenspencer/Work/1_Milk/Analysis-DGL/prepubResults.txt", header=TRUE, sep="\t", stringsAsFactors=FALSE)
 
 GeneID <- p[p$Library=="BGA146",]$TxID
 Count <-  p[p$Library=="BGA146",]$Count

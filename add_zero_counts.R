@@ -1,8 +1,8 @@
 # R script to generate zero counts for missing IDs
 
-p <- read.table(file="uniq_prepubCount.txt", header=TRUE, sep="\t", stringsAsFactors=FALSE)
+p <- read.table(file="/Users/kristenspencer/1_Milk/Analysis-DGL/uniq_prepubCount.txt", header=TRUE, sep="\t", stringsAsFactors=FALSE)
 
-l <- read.table(file="uniq_lactCount.txt", header=TRUE, sep="\t", stringsAsFactors=FALSE)
+l <- read.table(file="/Users/kristenspencer/1_Milk/Analysis-DGL/uniq_lactCount.txt", header=TRUE, sep="\t", stringsAsFactors=FALSE)
 
 comb <- merge(p, l, by="GeneID", all=TRUE, suffixes = c("P","L"))
 
