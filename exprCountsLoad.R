@@ -83,5 +83,6 @@ NRmature = CinciData[,c("X179.C_m2_2", "X174.X_m2_0", "X359_m0_0", "X153.C_m0_0"
 NRmature$mean = quickRowMean(NRmature)
 NRmature = cbind(GeneID = CinciData[,"GeneID"], NRmature)
 
-
+# Write group to a file without the column containing means
+# write.table(NRmature[,-8], file="NRmature.txt", quote=FALSE, sep = "\t", row.names=FALSE)
 
