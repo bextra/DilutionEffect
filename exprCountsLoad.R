@@ -14,6 +14,7 @@ quickRowMean =
         allRowMeans = sapply(1:nrow(df), function (row) mean(as.integer(df[row,])))
     }
 
+
 # Function takes a list of files that you want to make a data frame with
 # Returns the data frame with the expression averaged across the rows
 loadHarhayCounts = 
@@ -59,8 +60,9 @@ pflist = list.files("~/Work/1_Milk/Simulated_Reps/", pattern = "^p.+[1-6].txt")
 lflist = list.files("~/Work/1_Milk/Simulated_Reps/", pattern = "^l.+[1-6].txt")
 setwd("~/Work/1_Milk/Simulated_Reps/")
 
-prepuberty = loadHarhayCounts(pflist, 6)
-lactation = loadHarhayCounts(lflist, 6)
+# Load the data and get the mean expression value across the gene replicates
+prepuberty = loadHarhayCounts(pflist, n = 6) # n = number of replicates
+lactation = loadHarhayCounts(lflist, n = 6)
 
 ### 2. Nomsen-Rivers Data Set ###
 CinciData = read.table("~/Work/1_Milk/RawData/NomsenRivers_gene_expression/master_all_counts.txt",
