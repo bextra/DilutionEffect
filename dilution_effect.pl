@@ -74,6 +74,7 @@ sub adjust_abundance {
 	printf STDERR "The summative raw frequency of all genes is %.4f\n", $total_freq;
 	
 	#calculate threshold percent from total and store as threshold index
+	#for empirical threshold, determine the desired index and relative threshold
 	my $threshold_index = $total_freq * $threshold;
 	printf STDERR "The threshold index is %.4f\n", $threshold_index;
 	#printf STDOUT "The threshold index is %.4f\n", $threshold_index;
