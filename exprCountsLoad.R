@@ -84,5 +84,19 @@ NRmature$mean = quickRowMean(NRmature)
 NRmature = cbind(GeneID = CinciData[,"GeneID"], NRmature)
 
 # Write group to a file without the column containing means
-# write.table(NRmature[,-8], file="NRmature.txt", quote=FALSE, sep = "\t", row.names=FALSE)
+write.table(CinciData[,c("GeneID", "X183.G_c2_0")], file="ColostrumRep1.txt", quote=FALSE, sep = "\t", row.names=FALSE)
+write.table(CinciData[,c("GeneID", "X187.K_c2_0")], file="ColostrumRep2.txt", quote=FALSE, sep = "\t", row.names=FALSE)
+
+write.table(CinciData[,c("GeneID", "X160.J_c0_2")], file="TransitionalRep1.txt", quote=FALSE, sep = "\t", row.names=FALSE)
+write.table(CinciData[,c("GeneID", "X188.L_c2_0")], file="TransitionalRep2.txt", quote=FALSE, sep = "\t", row.names=FALSE)
+write.table(CinciData[,c("GeneID", "X179.C_c2_0")], file="TransitionalRep3.txt", quote=FALSE, sep = "\t", row.names=FALSE)
+write.table(CinciData[,c("GeneID", "X154.D_c0_0")], file="TransitionalRep4.txt", quote=FALSE, sep = "\t", row.names=FALSE)
+
+write.table(CinciData[,c("GeneID", "X179.C_m2_2")], file="MatureRep1.txt", quote=FALSE, sep = "\t", row.names=FALSE)
+write.table(CinciData[,c("GeneID", "X174.X_m2_0")], file="MatureRep2.txt", quote=FALSE, sep = "\t", row.names=FALSE)
+write.table(CinciData[,c("GeneID", "X359_m0_0")],   file="MatureRep3.txt", quote=FALSE, sep = "\t", row.names=FALSE)
+write.table(CinciData[,c("GeneID", "X153.C_m0_0")], file="MatureRep4.txt", quote=FALSE, sep = "\t", row.names=FALSE)
+write.table(CinciData[,c("GeneID", "X168.R_m2_2")], file="MatureRep5.txt", quote=FALSE, sep = "\t", row.names=FALSE)
+write.table(CinciData[,c("GeneID", "X183.G_m2_2")], file="MatureRep6.txt", quote=FALSE, sep = "\t", row.names=FALSE)
+
 
