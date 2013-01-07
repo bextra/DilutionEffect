@@ -5,6 +5,8 @@
 library("BiocInstaller")
 biocLite("biomaRt")
 library("biomaRt")
+biocLite("DAVIDQuery") # install
+library("DAVIDQuery")
 
 # # # # # # # # # # # # # # # # # 
 #
@@ -34,8 +36,30 @@ goids = getBM(attributes=c('entrezgene','go_id'),
 # Get GO Annotation
 #
 # # # # # # # # # # # # # # # # #
+# DAVID Notes
+# tool = "geneReport" # gives a matrix
+# tool = "geneReportFull" # gives a list of lists
+# tool = "gene2gene" # gene functional classification query
 
+result = DAVIDQuery(type="UNIPROT_ACCESSION", annot = NULL, tool = "geneReport")
+result = DAVIDQuery(testMe=TRUE)
+names(result)
+result$DAVIDQueryResult
 
+Sys.sleep(10)
+
+result = testGene2Gene(details = FALSE)
+names(result[[1]])
+
+result = DAVIDQuery(ids = DEadj$id,
+                    type="REFSEQ_MRNA", 
+                    annot = "GO_BP_FAT", 
+                    tool = "term2term"
+                    )
+
+?DAVIDQuery
+# load data from DAVID website
+tt = read.table("~/Desktop/tmpDAVID.txt", sep = "\t", header=TRUE)
 
 # # # # # # # # # # # # # # # # # 
 #
