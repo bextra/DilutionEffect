@@ -45,7 +45,10 @@ foreach my $gene (keys %$exp1) {
 	#$h{int $change}++; # lower resolution hist
 	$h{int $change * 10}++; # higher resolution hist
 	push @val, $change;
+	print $gene, "\t", $change, "\n";
 }
+
+exit;
 
 
 # print the histogram of change values
