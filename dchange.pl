@@ -9,7 +9,7 @@ my ($f1, $f2, $THRESHOLD) = @ARGV;
 my ($c1, $t1) = counts($f1);
 my ($c2, $t2) = counts($f2);
 
-# reduce counts in the larger file
+# reduce counts in the file with larger expression total
 # normalize them to have the same totals
 if ($t1 > $t2) {normalize($c1, $t1 / $t2)}
 else           {normalize($c2, $t2 / $t1)}
@@ -42,16 +42,16 @@ my @val;
 # lac / pre lac
 foreach my $gene (keys %$exp1) {
 	my $change = log($exp2->{$gene} / $exp1->{$gene}) / log(2);
-	$h{int $change}++;
-	#$h{int $change * 10}++; # higher resolution hist
+	#$h{int $change}++; # lower resolution hist
+	$h{int $change * 10}++; # higher resolution hist
 	push @val, $change;
 }
 
 
 # print the histogram of change values
 foreach my $val (sort {$a <=> $b} keys %h) {
-	printf "%d\t%d\n", $val, $h{$val};
-	#printf "%.1f\t%d\n", $val / 10, $h{$val}; # higher resolution hist
+	#printf "%d\t%d\n", $val, $h{$val}; # lower resolution hist
+	printf "%.1f\t%d\n", $val / 10, $h{$val}; # higher resolution hist
 }
 
 
