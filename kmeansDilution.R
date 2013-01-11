@@ -11,28 +11,21 @@
 library("fpc") # uses pam and clara
 library("cluster")
 
-# Load data
-tt = read.table("~/cowchange.txt", header=TRUE, sep="\t")
-
-# Explore clustering algorithms
-# pam will be slow on anything greater than 200 pts
-# use clara instead
-
 # silhouette rules
 # if s(i) = 1, cluster appropriately
 # if s(i) < 0, missclassified
 # if s(i) = 0, can't tell if classified correctly
 
 
-# # # # # # # # # # # # # # # # # # # # #  #
+# # # # # # # # # # # # # # # # # # # # # #
 #
 #                FUNCTIONS
 #
-# # # # # # # # # # # # # # # # # # # # #  #
+# # # # # # # # # # # # # # # # # # # # # #
 printRelevant =
     function (pamobject) {
         cat("Mediods\n", pamobject$medoids, 
-            "\nOverall average silhouette\n", pamobject$objective, 
+            "\nOverall average silhouette\n", pamobject$silinfo$avg.width, 
             "\nAver. silhouette by cluster\n", pamobject$silinfo$clus.avg.widths)
     }
 
@@ -65,38 +58,81 @@ claraPlain =
         return(clarax)
     }
 
-#### ---- Test Partitioning Around Medoids (PAM) ---- ####
-pamPlain(tt$Change)
+# # # # # # # # # # # # # # # # # # # # # #
+#
+#                CLUSTERING
+#
+# # # # # # # # # # # # # # # # # # # # # #
 
-# Notes: Really slow, silhouette for third cluster is low, but within range of 
-# sample silhouette values in Reynolds et al (2006) Clustering Rules.
+#### ---- Test CLARA w Estim. n of Clusters ---- ####
+kRangeClaraX = kRangeClara(qq, range= 2:10)
+plot(kRangeClaraX$pamobject)
 
-#### ---- Test Partitioning Around Medoids w Estim. n of Clusters ---- ####
-set.seed(3)
-kRangeClara(tt$Change, range= 2:10)
+pamkx = pamk(hha$Change, krange = 2:10, criterion="multiasw", ns = 2, seed = 3, usepam=FALSE, critout = TRUE)
+
+pamkx$pamobject$silinfo$avg.width
+pamkx$pamobject$silinfo$clus.avg.widths
+pamkx$pamobject$clusinfo
+pamkx$pamobject$medoids
+
+summary(kRangeClaraXhh$pamobject)
+
+# 1. Test clustering on log 2 of change on cow
+cc = read.table("~/cowchange.txt", header=TRUE, sep="\t") 
+
+
+
+# 2. Test clustering on log 2 of change on human
+hh = read.table("~/humanchange.txt", header=FALSE, sep="\t")
+
+
+
+# 3. Test clustering of absolute change on cow
+cca = read.table("~/tmp.txt", header=TRUE, sep="\t")
+
+
+
+# 4. Test clustering of absolute change on human
+hha = read.table("~/tmpHuman.txt", header=TRUE, sep="\t")
+
+
+
 
 # Notes: Separates out the 16 most enriched genes and provides the highest silhouette
 
-#### ---- Test Clustering Large Applications (CLARA) ---- ####
-set.seed(3)
-claraPlain(tt$Change)
-
-# Notes: With k = 3, this should perform the same as pamk, but they aren't and I don't know why.
 
 
-#### ---- Test k-means ---- ####
-fit = kmeans(tt$Change, centers = 3)
-
-aggregate(tt$Change, by=list(fit$cluster), FUN = mean)
-
-# Notes: gives cluster at expected centroids but does not report a goodness
-# metric like PAM... too basic for large data?
-# Cluster means: -2.76, -0.80, 2.23
 
 
-#### ---- Play with plots ---- ####
-range(tt$Change)
-options(scipen = 10)
 
-plot(density(rnorm(n = 100, mean=pamkx$pamobject[[1]])))
-plot(pamkx$pamobject$medoids)
+
+
+
+
+
+# #### ---- Test k-means ---- ####
+# fit = kmeans(tt$Change, centers = 3)
+# 
+# aggregate(tt$Change, by=list(fit$cluster), FUN = mean)
+# 
+# # Notes: gives cluster at expected centroids but does not report a goodness
+# # metric like PAM... too basic for large data?
+# # Cluster means: -2.76, -0.80, 2.23
+# 
+# #### ---- Test Clustering Large Applications (CLARA) ---- ####
+# set.seed(3)
+# claraPlain(tt$Change, k=2)
+# 
+# # Notes: With k = 3, this should perform the same as pamk, but they aren't and I don't know why.
+# #### ---- Play with plots ---- ####
+# range(tt$Change)
+# options(scipen = 10)
+# 
+# plot(density(rnorm(n = 100, mean=pamkx$pamobject[[1]])))
+# plot(pamkx$pamobject$medoids)
+# 
+# #### ---- Test Partitioning Around Medoids (PAM) ---- ####
+# pamPlain(tt$Change)
+# # Notes: Really slow, silhouette for third cluster is low, but within range of 
+# # sample silhouette values in Reynolds et al (2006) Clustering Rules.
+# pam will be slow on anything greater than 200 pts
