@@ -1,16 +1,19 @@
-# kmeansDilution.R
-# K. Beck
-# Jan. 8, 2012
+kmeansDilution.R
+K. Beck
+Jan. 8, 2012
 
-# Objective: Determine if k-means clustering across the log2 fold change between
-# non-lactating and lactating states can better describe the dilution effect
+**Objective:** Determine if k-means clustering across the log2 fold change between non-lactating and lactating states can better describe the dilution effect
 
-# Secondary Objective: Determine best clustering algorithm: PAM or CLARA or mixture
+**Secondary Objective:** Determine best clustering algorithm: PAM or CLARA or mixture
 
+```{r echo=FALSE, message=FALSE}
 # Load packages
 library("fpc") # uses pam and clara
 library("cluster")
+library("knitr")
+```
 
+```{r echo=FALSE}
 # silhouette rules
 # if s(i) = 1, cluster appropriately
 # if s(i) < 0, missclassified
@@ -39,12 +42,16 @@ pamPlain =
 
 
 kRangeClara =
-    function(data, range, silrank = "multiasw") {
-        pamkx = pamk(data, krange = range, criterion=silrank, usepam=FALSE)
+    function(data, range, silrank = "multiasw", ns = 10, seed= 3) {
+        pamkx = pamk(data, krange = range, 
+                     criterion=silrank, 
+                     usepam=FALSE, 
+                     ns = ns, seed = seed,
+                     critout = TRUE)
         cat("Optimal cluster size =", pamkx$nc, "\n")
         printRelevant(pamkx$pamobject)
-        cat("\nCluster Info\n")
-        pamkx$pamobject$clusinfo
+        #cat("\nCluster Info\n")
+        #pamkx$pamobject$clusinfo
         return(pamkx)
     }
 
@@ -57,7 +64,12 @@ claraPlain =
         # plot(clarax)
         return(clarax)
     }
+```
 
+<\br>
+<\br>
+**Cow** log 2 fold change pre-puberty to lactation
+```{r echo = FALSE}
 # # # # # # # # # # # # # # # # # # # # # #
 #
 #                CLUSTERING
@@ -65,51 +77,71 @@ claraPlain =
 # # # # # # # # # # # # # # # # # # # # # #
 
 #### ---- Test CLARA w Estim. n of Clusters ---- ####
-kRangeClaraX = kRangeClara(qq, range= 2:10)
-plot(kRangeClaraX$pamobject)
+#kRangeClaraX = kRangeClara(qq, range= 2:10)
+#plot(kRangeClaraX$pamobject)
 
-pamkx = pamk(hha$Change, krange = 2:10, criterion="multiasw", ns = 2, seed = 3, usepam=FALSE, critout = TRUE)
+#pamkx = pamk(hha$Change, krange = 2:10, criterion="multiasw", ns = 2, seed = 3, usepam=FALSE, critout = TRUE)
 
-pamkx$pamobject$silinfo$avg.width
-pamkx$pamobject$silinfo$clus.avg.widths
-pamkx$pamobject$clusinfo
-pamkx$pamobject$medoids
+#pamkx$pamobject$silinfo$avg.width
+#pamkx$pamobject$silinfo$clus.avg.widths
+#pamkx$pamobject$clusinfo
+#pamkx$pamobject$medoids
 
-summary(kRangeClaraXhh$pamobject)
+#summary(kRangeClaraXhh$pamobject)
 
 # 1. Test clustering on log 2 of change on cow
-cc = read.table("~/cowchange.txt", header=TRUE, sep="\t") 
+cc = read.table("~/cowchange.txt", header=TRUE, sep="\t")
+ccx = kRangeClara(cc$Change, range= 2:10)
+cat("Cluster Info\n")
+ccx$pamobject$clusinfo
 
+```
 
-
+<\br>
+**Human** log 2 fold change colostrum to mature milk
+```{r echo=FALSE}
 # 2. Test clustering on log 2 of change on human
-hh = read.table("~/humanchange.txt", header=FALSE, sep="\t")
+hh = read.table("~/humanchange.txt", header=TRUE, sep="\t")
+hhx = kRangeClara(hh$Change, range= 2:10)
+cat("Cluster Info\n")
+hhx$pamobject$clusinfo
 
 
+```
 
+<\br>
+**Cow** absolute change (lactation - pre-pub)
+```{r echo=FALSE}
 # 3. Test clustering of absolute change on cow
 cca = read.table("~/tmp.txt", header=TRUE, sep="\t")
+ccax = kRangeClara(cca$Change, range= 2:10, ns= 2)
+cat("Cluster Info\n")
+ccax$pamobject$clusinfo
 
+```
 
-
+**Human** absolute change (mature - colostrum)
+```{r echo=FALSE}
 # 4. Test clustering of absolute change on human
 hha = read.table("~/tmpHuman.txt", header=TRUE, sep="\t")
+hhax = kRangeClara(hha$Change, range= 2:10, ns= 2)
+cat("Cluster Info\n")
+hhax$pamobject$clusinfo
+
+```
 
 
 
+
+
+
+
+
+
+```{r}
+## Unneeded code ##
 
 # Notes: Separates out the 16 most enriched genes and provides the highest silhouette
-
-
-
-
-
-
-
-
-
-
-
 # #### ---- Test k-means ---- ####
 # fit = kmeans(tt$Change, centers = 3)
 # 
@@ -136,3 +168,4 @@ hha = read.table("~/tmpHuman.txt", header=TRUE, sep="\t")
 # # Notes: Really slow, silhouette for third cluster is low, but within range of 
 # # sample silhouette values in Reynolds et al (2006) Clustering Rules.
 # pam will be slow on anything greater than 200 pts
+```
