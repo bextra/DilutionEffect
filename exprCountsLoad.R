@@ -99,4 +99,6 @@ write.table(CinciData[,c("GeneID", "X153.C_m0_0")], file="MatureRep4.txt", quote
 write.table(CinciData[,c("GeneID", "X168.R_m2_2")], file="MatureRep5.txt", quote=FALSE, sep = "\t", row.names=FALSE)
 write.table(CinciData[,c("GeneID", "X183.G_m2_2")], file="MatureRep6.txt", quote=FALSE, sep = "\t", row.names=FALSE)
 
+write.table(NRcolostrum[,c("GeneID", "mean")], file="ColostrumAveraged.txt", quote=FALSE, sep= "\t", row.names= FALSE)
+write.table(NRmature[,c("GeneID", "mean")], file="MatureAveraged.txt", quote=FALSE, sep= "\t", row.names= FALSE)
 
