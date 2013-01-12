@@ -11,6 +11,7 @@ Jan. 8, 2012
 library("fpc") # uses pam and clara
 library("cluster")
 library("knitr")
+options(scipen = 10)
 ```
 
 ```{r echo=FALSE}
@@ -29,7 +30,7 @@ printRelevant =
     function (pamobject) {
         cat("Mediods\n", pamobject$medoids, 
             "\nOverall average silhouette\n", pamobject$silinfo$avg.width, 
-            "\nAver. silhouette by cluster\n", pamobject$silinfo$clus.avg.widths)
+            "\nAver. silhouette by cluster\n", pamobject$silinfo$clus.avg.widths, "\n")
     }
 
 
@@ -66,8 +67,8 @@ claraPlain =
     }
 ```
 
-<\br>
-<\br>
+</br>
+</br>
 **Cow** log 2 fold change pre-puberty to lactation
 ```{r echo = FALSE}
 # # # # # # # # # # # # # # # # # # # # # #
@@ -95,9 +96,13 @@ ccx = kRangeClara(cc$Change, range= 2:10)
 cat("Cluster Info\n")
 ccx$pamobject$clusinfo
 
+cat("Explore different cluster sizes despite silhouettes")
+cat("k = 6")
+claraPlain(cc$Change, k=6)
+
 ```
 
-<\br>
+</br>
 **Human** log 2 fold change colostrum to mature milk
 ```{r echo=FALSE}
 # 2. Test clustering on log 2 of change on human
@@ -106,27 +111,60 @@ hhx = kRangeClara(hh$Change, range= 2:10)
 cat("Cluster Info\n")
 hhx$pamobject$clusinfo
 
+cat("Explore different cluster sizes despite silhouettes")
+cat("k = 3")
+claraPlain(hh$Change, k=3)
+
+cat("k = 6")
+claraPlain(hh$Change, k=6)
 
 ```
 
-<\br>
+</br>
 **Cow** absolute change (lactation - pre-pub)
 ```{r echo=FALSE}
 # 3. Test clustering of absolute change on cow
 cca = read.table("~/tmp.txt", header=TRUE, sep="\t")
-ccax = kRangeClara(cca$Change, range= 2:10, ns= 2)
+ccax = kRangeClara(cca$Change, range= 2:10, ns= 2, silrank="asw")
 cat("Cluster Info\n")
 ccax$pamobject$clusinfo
 
+
+cat("Explore different cluster sizes despite silhouettes")
+cat("k = 3")
+claraPlain(cca$Change, k=3)
+cat("k = 7")
+claraPlain(cca$Change, k=7)
+cat("k = 8")
+claraPlain(cca$Change, k=8)
+cat("k = 12")
+claraPlain(cca$Change, k=12)
+
 ```
 
+</br>
 **Human** absolute change (mature - colostrum)
 ```{r echo=FALSE}
 # 4. Test clustering of absolute change on human
 hha = read.table("~/tmpHuman.txt", header=TRUE, sep="\t")
-hhax = kRangeClara(hha$Change, range= 2:10, ns= 2)
+hhax = kRangeClara(hha$Change, range= 2:15, ns= 2, silrank="multiasw")
 cat("Cluster Info\n")
 hhax$pamobject$clusinfo
+
+cat("Explore different cluster sizes despite silhouettes")
+cat("k = 3")
+claraPlain(hha$Change, k=3)
+
+cat("k = 7")
+claraPlain(hha$Change, k=7)
+
+cat("k = 10")
+claraPlain(hha$Change, k=10)
+
+cat("k = 14")
+claraPlain(hha$Change, k=14)
+
+
 
 ```
 
@@ -138,7 +176,7 @@ hhax$pamobject$clusinfo
 
 
 
-```{r}
+```{r echo = FALSE}
 ## Unneeded code ##
 
 # Notes: Separates out the 16 most enriched genes and provides the highest silhouette
