@@ -118,6 +118,8 @@ sub adjust_abundance {
 	my $dil_adjusted_freq;
 	print STDOUT "GeneID\tRawExp\tAdjExp\n";
 
+	my $highgenes;
+
 	while (my ($gene, $raw_freq) = each %genes_to_frequency) {
 		if ($raw_freq <= $threshold_index) {
 			#adjust the lower abundance genes
@@ -126,8 +128,12 @@ sub adjust_abundance {
 				} else { printf STDOUT "$gene\t%d\t%d\n", $raw_freq, $dil_adjusted_freq;}
 		} else {
 			printf STDOUT "$gene\t%d\t%d\n", $raw_freq, $raw_freq;
+			printf STDERR "$gene\t%d\n", $raw_freq;
+			$highgenes++;
+			
 		}
-	}	
+	}
+	print STDERR "There were $highgenes high abundance genes\n";	
 }
 
 __END__
