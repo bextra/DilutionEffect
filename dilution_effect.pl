@@ -3,8 +3,8 @@
 # by K_Beck
 use strict; use warnings;
 use Getopt::Std;
-use vars qw ($opt_h $opt_v $opt_a);
-getopts('hva:');
+use vars qw ($opt_h $opt_v $opt_a $opt_d);
+getopts('hva:d');
 
 # # # # # # # # # #
 # 
@@ -43,7 +43,13 @@ my $threshold = $opt_a; #renames threshold for easy calling
 print STDERR "The threshold is $threshold\n";
 
 #calls sub to adjust frequency of low abundance transcripts
+if ($opt_a & $opt_d) {
+	die "Must select determine empirical threshold (-d) or adjust with specified threshold (-a)";
+}
+
 adjust_abundance() if ($opt_a);
+
+determine_threshold() if ($opt_d);
 
 warn "Other arguments were: @ARGV\n\n";
 
