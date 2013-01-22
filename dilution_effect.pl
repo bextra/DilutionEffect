@@ -151,10 +151,59 @@ sub adjust_abundance {
 }
 
 sub determine_threshold {
-	while (my ($gene, $raw_freq) = each %genes_to_frequency) {
+	my $tmp;
+	
+	# Sort gene IDs in order based on expression value- largest to smallest
+	my @keys = sort { $genes_to_frequency{$b} <=> $genes_to_frequency{$a} } keys %genes_to_frequency;
+	
+	# Correct for data sets with odd number of genes
+	my $true_length = int((scalar @keys) / 2) * 2;
 
-	sort
+	# Get the difference between the sorted expression values
+	for (my $i = 0; $i < $true_length; $i++) {
+		#print "$keys[$i]\t$genes_to_frequency{$keys[$i]}\n"; # checkpoint
+ 		
+ 		my $dif = $genes_to_frequency{$keys[$i]} - $genes_to_frequency{$keys[$i+1]};
+ 		print "$i\t$keys[$i]\t$genes_to_frequency{$keys[$i]}\t$keys[$i+1]\t$genes_to_frequency{$keys[$i+1]}\t$dif\n";
+		
+		# TODO: now determine some way to pick the empirical threshold in between these
+
+ 	}
+ 	
+	# alternative sorting method
+	# 	foreach my $key (sort { $genes_to_frequency{$b} <=> $genes_to_frequency{$a} } keys %genes_to_frequency) {
+	# 		printf "%s\t%4d\n", $key, $genes_to_frequency{$key};
+	#		$dif = $tmp - $genes_to_frequency{$key}; # calculate dif
+	# 		$tmp = $genes_to_frequency{$key}; # reset
+	# 		
+	# 	}
+	#     
+
 	return(0.001);
 
 }
 __END__
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
