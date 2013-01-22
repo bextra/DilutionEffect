@@ -11,51 +11,51 @@ getopts('hva:d');
 # OPTIONS
 #
 # # # # # # # # # #
+my $VERSION = "1.0";
 if ($opt_h) {
 print "Usage: dilution_effect.pl [options] <arguments...>
-	options:
+	Options:
 	-h	help
 	-v	version
 	-a	dilution-adjusted gene expression data file by expression level with
 		  specified threshold from command line i.e. -a 5 <file>
-	***NOTE: Use data file with duplicates removed by dupbegone.pl or program will
-	not run properly.***\n";
+	*NOTE: Gene IDs must be unique. Rmeove duplicates with dupbegone.pl if needed\n";
+	exit;
+} elsif ($opt_v) {
+	print "Version: ", $VERSION, "\n"; 
+	exit;
+} elsif ((not defined ($opt_a)) & (not defined ($opt_d))) {
+	die "Please specify threshold method: adjust with specified threshold (-a) or determine threshold (-d)";
 }
 
-my $VERSION = "1.0";
-if ($opt_v) {print "version ", $VERSION, "\n"; exit;}
-my ($filename) = @ARGV; #renames ARGV
+my ($filename) = @ARGV; # renames ARGV
 
-#define global variables
+# Define global variables
 my $total_freq;
-my %genes_to_frequency; #hash with the genes and their relative freq
-my %genes_to_abundance; #hash with the genes and their abundance as a proportion
-						#of the total frequency of all genes
+my %genes_to_frequency; # gene ids and their frequencies
+my %genes_to_abundance; # gene ids and their abundance as a proportion
+						# of total frequency of all genes
 
-#THRESHOLD CHECKS:
-#need one floating point number between 0 and 1 as command line argument 
-my $error = "No threshold defined from command line i.e. -a 0.05 <data_file>\n";
-die "$error" if (not defined ($opt_a));
-	
-die "Usage: $0 <threshold 0.0 to 1.0>\n" unless (($opt_a > 0) and ($opt_a <=1));
+# THRESHOLD CHECKS:
+if ($opt_a) {
+	die "Usage: $0 -a <threshold 0.0 to 1.0> <file>\n" unless (($opt_a > 0) and ($opt_a <=1));
+	# Need one floating point number between 0 and 1 as command line argument 
+}
+
+exit; 
 
 my $threshold = $opt_a; #renames threshold for easy calling
 print STDERR "The threshold is $threshold\n";
 
 #calls sub to adjust frequency of low abundance transcripts
-if ($opt_a & $opt_d) {
-	die "Must select determine empirical threshold (-d) or adjust with specified threshold (-a)";
-}
 
 adjust_abundance() if ($opt_a);
-
-# THRESHOLD TEST version commit and see if this still exists
 
 determine_threshold() if ($opt_d);
 
 warn "Other arguments were: @ARGV\n\n";
 
-exit; 
+
 
 # # # # # # # # # # #
 #
