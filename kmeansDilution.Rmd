@@ -177,6 +177,12 @@ claraPlain(hha$Change, k=14)
 
 
 ```{r echo = FALSE}
+
+claraPlain(lactation$mean)
+
+kRangeClara(lactation$mean, range=2:15)
+kRangeClara(NRmature$mean, range=2:15)
+
 ## Unneeded code ##
 
 # Notes: Separates out the 16 most enriched genes and provides the highest silhouette
