@@ -19,8 +19,15 @@ wilcox.test(x=prepuberty$mean, y=lactation$mean)
 # therefore colostrum and mature are nonidentical populations
 # ref: http://www.r-tutor.com/elementary-statistics/non-parametric-methods/mann-whitney-wilcoxon-test
 
-
+plot(dwilcox(lactation$mean))
+?dwilcox
+## Kolmogorov-Smirnov Tests
 ks.test(x=prepuberty$mean, y=lactation$mean)
 ks.test(x=NRcolostrum$mean, y=NRmature$mean)
 
-plot(dwilcox())
+
+
+## Explore Pareto functions
+
+
+
