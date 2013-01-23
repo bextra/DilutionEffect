@@ -20,6 +20,7 @@ hist(NRmature$mean)
 plot(density(NRcolostrum$mean))
 plot(density(log10(NRtransitional$mean)))
 plot(density(log10(NRmature$mean)))
+plot(density(NRmature$mean))
 
 # Box plot
 boxplot(log10(NRcolostrum$mean), log10(NRtransitional$mean), log10(NRmature$mean),
