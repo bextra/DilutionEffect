@@ -49,12 +49,17 @@ ks.test(x=NRcolostrum$mean, y=NRmature$mean)
 # returns the x value at this portion of the curve
 quantile(rivers, probs=c(0.25, .5, .75, 1))
 plot(density(rivers))
-quantile(lactation$mean, probs = c(0.05, 0.95, .999908, 1), names=TRUE)
+quantile(lactation$mean, probs = c(0.05, 0.95, 0.999, .999908, 1), names=TRUE)
+quantile(NRmature$mean, probs = c(0.05, 0.95, 0.999, .999908, 1), names=TRUE)
 quantile(lactation$mean, probs = c(0.05, 0.9908, .9968, 1), names=TRUE)
 quantile(lactation$mean, probs = c(0.05, 0.95), names=TRUE)
 # ref: http://ww2.coastal.edu/kingw/statistics/R-tutorials/prob.html
-
-
+?quantile
+# # # # # # # # # # # # # # #
+#
+# VGAM - Pareto Distribution
+# 
+# # # # # # # # # # # # # # #
 ## Explore Pareto functions
 library("VGAM")
 # location and k values are set to the vignette example
@@ -84,6 +89,154 @@ pareto1() # Pops out pareto formula
 # plot(lactation$mean, dnorm(lactation$mean))
 
 
-### Explore Peaks Over a Threshold
+# # # # # # # # # # # # # # #
+#
+# POT - Pareto Distribution
+# 
+# # # # # # # # # # # # # # #
+### Explore Peaks Over a Threshold ###
 library("POT")
-demo(POT)
+
+# Given test data
+plot(density(ardieres))
+head(ardieres)
+
+# Example from news review of package
+# ref: http://pot.r-forge.r-project.org/docs/Rnews_2007-1.pdf
+# page 34
+data("ardieres")
+# Extract independent events from the time series and select
+# a suitable threshold for a good asymptotic approximation
+tmp <- clust(ardieres, u = 0.85, tim.cond = 7/365,
+             clust.max = TRUE) # u = threshold
+# cluster stage should balance between bias and variance
+# The threshold selection stage is a compromise between
+# bias and variance. On one hand, if a too
+# high threshold is selected, the bias decreases as the
+# asymptotic approximation in equation (1) is good
+# enough while the variance increases as there is not
+# enough data above this threshold. On the other
+# hand, by taking a lower threshold, the variance decreases
+# as the number of observations is larger and
+# the bias increases as the asymptotic approximation
+# becomes poorer.
+par(mfrow=c(2,2))
+mrlplot(tmp[,"obs"], xlim = c(0.85, 17))
+diplot(tmp, u.range = c(0.85, 17))
+tcplot(tmp[,"obs"], u.range = c(0.85, 17))
+par(mfrow=c(1,1))
+
+events <- clust(ardieres, u = 5,
+                tim.cond = 7/365, clust.max = TRUE)
+
+obs <- events[,"obs"]
+pwmu <- fitgpd(obs, thresh = 5, "pwmu")
+mle <- fitgpd(obs, thresh = 5, "mle")
+
+par(mfrow=c(2,2))
+plot(pwmu, npy=2.63)
+
+gpd.pfrl(mle, 0.995, range = c(24.54545, 101.31313),
+         conf = 0.95)
+
+
+## My TURN ##
+par(mfrow=c(2,2))
+mle = fitgpd(lactation$mean, 0)
+plot(mle)
+
+# determine threshold using
+tcplot
+mrlplot
+lmomplot
+exiplot
+diplot
+# goal: select enough events to reduce variance, but not too much as that you select
+# events coming from a central part of the distribution and induce bias
+
+par(mfrow=c(1,2))
+tcplot(lactation$mean, u.range=c(0,180000))
+range(lactation$mean)
+
+# Really basic example
+x = runif(10000)
+range(x)
+tcplot(x, u.range=c(0, 0.999))
+par(mfrow=c(1,1))
+
+# Another method
+x = rnorm(10000)
+mrlplot(x, u.range= c(1, quantile(x, probs = 0.995)),
+        col = c("green", "black", "green"),
+        nt = 200)
+
+mrlplot(lactation$mean, u.range= c(0, quantile(lactation$mean, probs = 0.999908)),
+        col = c("green", "black", "green"),
+        nt = 200)
+mrlplot(NRmature$mean, u.range= c(0, quantile(lactation$mean, probs = 0.999908)),
+        col = c("green", "black", "green"),
+        nt = 200)
+
+mrlplot(lactation$mean, u.range= c(0, quantile(lactation$mean, probs = 0.995)),
+        col = c("green", "black", "green"),
+        nt = 200)
+
+mrlplot(NRmature$mean, u.range= c(0, quantile(lactation$mean, probs = 0.995)),
+        col = c("green", "black", "green"),
+        nt = 200)
+
+## L-moments plot ## Errors out, manual notes that this has poor performance on real data
+lmomplot(lactation$mean, u.range= c(1, quantile(lactation$mean, probs = 0.999908)),
+        identity=FALSE)
+lmomplot(NRmature$mean, u.range= c(1, quantile(lactation$mean, probs = 0.999908)),
+        identity=FALSE)
+
+
+## Determine what the proper scale and shape are
+# Need a threshold from above???
+
+?fitgpd
+mom = fitgpd(lactation$mean, threshold= 1, "moments")
+par(mfrow=c(2,2))
+plot(mom)
+
+
+
+# # # # # # # # # # # # # # #
+#
+# Exponential Distribution
+# 
+# # # # # # # # # # # # # # #
+
+
+par(mfrow=c(1,1))
+plot(lactation$mean, dexp(lactation$mean, rate = 1/mean(lactation$mean)), 
+     main = "Exponential",
+     ylab = "Density",
+     xlab = "TPM"
+     )
+
+
+pp = pexp(lactation$mean, rate = 1/mean(lactation$mean))
+qexp(0.999908, rate = 1/mean(lactation$mean))
+
+pp = pexp(lactation$mean, rate = 1/mean(NRmature$mean))
+qexp(0.999908, rate = 1/mean(NRmature$mean))
+
+## COW ##
+qq = qexp(0.999999, rate = 1/mean(lactation$mean))
+qq = 2357.697
+totalExpr = sum(lactation$mean)
+aboveQQ = sum(subset(lactation$mean, lactation$mean > qq)) # 66 high abundance genes
+adjFactor = 1/(1-(aboveQQ/totalExpr))
+
+## HUMAN ##
+qq = qexp(0.999999, rate = 1/mean(NRmature$mean))
+qq = 25862.106 # this is the quantile 99.9% from line 52 and 53
+totalExpr = sum(NRmature$mean)
+aboveQQ = sum(subset(NRmature$mean, NRmature$mean > qq)) # 308 high abundance genes
+adjFactor = 1/(1-(aboveQQ/totalExpr))
+
+# for pexp and qexp
+lower.tail = TRUE # find prob of less than that number
+lower.tail = FALSE # find prob of greater than that number
