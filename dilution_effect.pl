@@ -3,8 +3,8 @@
 # K. Beck
 use strict; use warnings;
 use Getopt::Std;
-use vars qw ($opt_h $opt_v $opt_a $opt_d);
-getopts('hva:d');
+use vars qw ($opt_h $opt_v $opt_a);
+getopts('hva:');
 
 # # # # # # # # # #
 # 
