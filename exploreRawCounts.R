@@ -1,6 +1,6 @@
 # exploreRawCounts.R
 # K. Beck
-# Jan. 15, 2012
+# Jan. 15, 2013
 
 # Load data with exprCountsLoad.R
 options(scipen= 10)
@@ -26,6 +26,14 @@ plot(density(NRmature$mean))
 boxplot(log10(NRcolostrum$mean), log10(NRtransitional$mean), log10(NRmature$mean),
         pars = list(boxwex = 1.5, staplewex = 0.5, outwex = 0.5)
 )
+
+# Multi-dimensional Scaling Plot
+source("http://www.bioconductor.org/biocLite.R")
+biocLite("edgeR")
+# run this once you get the CDS
+# see if there is a similar step in the DESeq package
+
+
 
 ## Get basic descriptive statistics
 # Mean
