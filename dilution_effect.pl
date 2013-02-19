@@ -3,8 +3,8 @@
 # K. Beck
 use strict; use warnings;
 use Getopt::Std;
-use vars qw ($opt_h $opt_v $opt_a);
-getopts('hva:');
+use vars qw ($opt_h $opt_v $opt_a $opt_d);
+getopts('hva:d');
 
 # # # # # # # # # #
 # 
@@ -19,7 +19,8 @@ print "Usage: dilution_effect.pl [options] <arguments...>
 	-v	version
 	-a	dilution-adjusted gene expression data file by expression level with
 		  specified threshold from command line i.e. -a 5 <file>
-	*NOTE: Gene IDs must be unique. Rmeove duplicates with dupbegone.pl if needed\n";
+	-d determine threshold for user
+	*NOTE: Gene IDs must be unique. Remove duplicates with dupbegone.pl if needed\n";
 	exit;
 } elsif ($opt_v) {
 	print "Version: ", $VERSION, "\n"; 
