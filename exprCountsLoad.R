@@ -102,3 +102,5 @@ write.table(CinciData[,c("GeneID", "X183.G_m2_2")], file="MatureRep6.txt", quote
 write.table(NRcolostrum[,c("GeneID", "mean")], file="ColostrumAveraged.txt", quote=FALSE, sep= "\t", row.names= FALSE)
 write.table(NRmature[,c("GeneID", "mean")], file="MatureAveraged.txt", quote=FALSE, sep= "\t", row.names= FALSE)
 
+write.table(lactation[,c("GeneIDs", "mean")], file="LactationAveraged.txt", quote=FALSE, sep= "\t", row.names= FALSE)
+write.table(prepuberty[,c("GeneIDs", "mean")], file="PrepubertyAveraged.txt", quote=FALSE, sep= "\t", row.names= FALSE)
