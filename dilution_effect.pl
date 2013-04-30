@@ -58,7 +58,7 @@ if ($opt_d) {
 }
 
 
-exit; # move eventually
+#exit; # move eventually
 
 # Adjust frequency of low abundance transcripts
 adjust_abundance();
