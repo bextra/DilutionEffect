@@ -9,7 +9,7 @@ die "usage: $0 <pre lac> <lac> <threshold>\n" unless @ARGV == 3;
 my ($f1, $f2, $THRESHOLD) = @ARGV;
 
 # Read counts
-# Return reference to a hash GeneID -> count value
+# Return reference to a hash GeneID -> count value and total gene expression
 my ($c1, $t1) = counts($f1); # pre-pub
 my ($c2, $t2) = counts($f2); # lac
 
