@@ -49,11 +49,12 @@ median(NRmature$mean)
 ## Subset data to remove lowly abundant genes
 shortC = subset(NRcolostrum$mean, NRcolostrum$mean > 3)
 shortT = subset(NRtransitional$mean, NRtransitional$mean > 3)
-shortM = subset(NRmature$mean, NRmature$mean > 3)
+shortM = subset(NRmature$mean, NRmature$mean > 10)
 
 ## Explore subsetted data
 hist(shortC)
-plot(density(shortC))
+plot(density(shortM))
+plot()
 
 ## Other descriptive plots to help determine distribution
 hist(lactation$mean, main = "Histogram  of observed data")
