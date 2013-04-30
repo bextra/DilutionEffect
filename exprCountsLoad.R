@@ -56,16 +56,16 @@ loadHarhayCounts =
 
 ### 1. Harhay Data Set ###
 # Use just the six replicates that we have already included in the analysis
-pflist = list.files("~/Work/1_Milk/Simulated_Reps/", pattern = "^p.+[1-6].txt")
-lflist = list.files("~/Work/1_Milk/Simulated_Reps/", pattern = "^l.+[1-6].txt")
-setwd("~/Work/1_Milk/Simulated_Reps/")
+pflist = list.files("~/Work/1_Milk/DilutionEffect/RNASeqReps-Harhay/", pattern = "^p.+[1-6].txt")
+lflist = list.files("~/Work/1_Milk/DilutionEffect/RNASeqReps-Harhay/", pattern = "^l.+[1-6].txt")
+setwd("~/Work/1_Milk/DilutionEffect/RNASeqReps-Harhay/")
 
 # Load the data and get the mean expression value across the gene replicates
 prepuberty = loadHarhayCounts(pflist, n = 6) # n = number of replicates
 lactation = loadHarhayCounts(lflist, n = 6)
 
 ### 2. Nomsen-Rivers Data Set ###
-CinciData = read.table("~/Work/1_Milk/RawData/NomsenRivers_gene_expression/master_all_counts.txt",
+CinciData = read.table("~/Work/1_Milk/DilutionEffect/RawData/NomsenRivers_gene_expression/master_all_counts.txt",
                 header = TRUE)
 
 # Group 1 samples (true colostrum) 
@@ -83,6 +83,8 @@ NRmature = CinciData[,c("X179.C_m2_2", "X174.X_m2_0", "X359_m0_0", "X153.C_m0_0"
 NRmature$mean = quickRowMean(NRmature)
 NRmature = cbind(GeneID = CinciData[,"GeneID"], NRmature)
 
+setwd("~/Work/1_Milk/DilutionEffect/RNASeqReps-NR/")
+
 # Write group to a file without the column containing means
 write.table(CinciData[,c("GeneID", "X183.G_c2_0")], file="ColostrumRep1.txt", quote=FALSE, sep = "\t", row.names=FALSE)
 write.table(CinciData[,c("GeneID", "X187.K_c2_0")], file="ColostrumRep2.txt", quote=FALSE, sep = "\t", row.names=FALSE)
@@ -99,8 +101,9 @@ write.table(CinciData[,c("GeneID", "X153.C_m0_0")], file="MatureRep4.txt", quote
 write.table(CinciData[,c("GeneID", "X168.R_m2_2")], file="MatureRep5.txt", quote=FALSE, sep = "\t", row.names=FALSE)
 write.table(CinciData[,c("GeneID", "X183.G_m2_2")], file="MatureRep6.txt", quote=FALSE, sep = "\t", row.names=FALSE)
 
-write.table(NRcolostrum[,c("GeneID", "mean")], file="ColostrumAveraged.txt", quote=FALSE, sep= "\t", row.names= FALSE)
-write.table(NRmature[,c("GeneID", "mean")], file="MatureAveraged.txt", quote=FALSE, sep= "\t", row.names= FALSE)
+write.table(NRcolostrum[,c("GeneID", "mean")], file="AveragedColostrum.txt", quote=FALSE, sep= "\t", row.names= FALSE)
+write.table(NRtransitional[,c("GeneID", "mean")], file="AveragedTransitional.txt", quote=FALSE, sep= "\t", row.names= FALSE)
+write.table(NRmature[,c("GeneID", "mean")], file="AveragedMature.txt", quote=FALSE, sep= "\t", row.names= FALSE)
 
-write.table(lactation[,c("GeneIDs", "mean")], file="LactationAveraged.txt", quote=FALSE, sep= "\t", row.names= FALSE)
-write.table(prepuberty[,c("GeneIDs", "mean")], file="PrepubertyAveraged.txt", quote=FALSE, sep= "\t", row.names= FALSE)
+write.table(lactation[,c("GeneIDs", "mean")], file="AveragedLactation.txt", quote=FALSE, sep= "\t", row.names= FALSE)
+write.table(prepuberty[,c("GeneIDs", "mean")], file="AveragedPrepuberty.txt", quote=FALSE, sep= "\t", row.names= FALSE)
