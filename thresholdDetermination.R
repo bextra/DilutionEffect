@@ -8,6 +8,12 @@ options(scipen= 10)
 # Objective: Use quantiles to determine the empirical threshold for calculating the dilution adjustment 
 # which is fed to dilutioneffect.pl
 
+# # # # # # 
+# 
+# FUNCTIONS
+#
+# # # # # # 
+
 determineThreshold = 
     function (data, column = 2, q = 0.9995) {
         # Store the column of interest in a temporary variable
@@ -32,6 +38,9 @@ determineThreshold =
         return(threshold)
     }
 
+
+# # # # # # # #
+
 ## Determine thresholds for both cow and human data at each lactation stage
 # Cow
 threshHarhayPrepub = sapply(2:7, function(x) determineThreshold(prepuberty, column = x, q= 0.9995))
@@ -46,6 +55,7 @@ threshNRmature = sapply(2:7, function(x) determineThreshold(NRmature, column = x
 
 
 
+# # # # # # # #
 
 # TODO maybe report the high abundance genes for comparison between human lactation
 intersect(highGenesHs$GeneID, highGenesHsC$GeneID) # 11 shared high abundance genes between colostrum and mature
