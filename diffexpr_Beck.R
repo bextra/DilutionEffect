@@ -28,12 +28,18 @@ computeDEgenes(milkTable, outputFile="./atyourmamasfile.txt")
 
 # Data structure should be columns of one sample condition bound to columns of another sample condition
 
+# # # # # # # # # # # # # # # # # 
+#
+# Functions 
+#
+# # # # # # # # # # # # # # # # #
+
 ## DESeq ##
 computeDEgenes =
-    function (countTable, n = 6, outputFile = "./DEgenes.txt") {
+    function (countTable, repsCondition1 = 6, repsCondition2 = 6, outputFile = "./DEgenes.txt") {
         
         # Describe the conditions (i.e. treatment vs non-treatment) of each sample
-        cond = factor(c(rep("baseline", n), rep("lactation", n))) # number indicated is the number of replicates in each treatment group
+        cond = factor(c(rep("condition1", repsCondition1), rep("condition2", repsCondition2))) # number indicated is the number of replicates in each treatment group
         
         # Create a CountDataSet which is the central data structure in DESeq
         cds = newCountDataSet(countTable, cond)
@@ -50,7 +56,7 @@ computeDEgenes =
         
         # test for differential expression
         cat("Testing for differential expression.\n")
-        res = nbinomTest(cds, "baseline", "lactation")
+        res = nbinomTest(cds, "condition1", "condition2")
         
         # if the Mean of one of the two comparisons is zero, the log2FoldChange will be INF/-INF so calculating an adjusted log2 fold change
         res$adjLog2FoldChange = log2 ((res$baseMeanB + 1)/(res$baseMeanA + 1))
