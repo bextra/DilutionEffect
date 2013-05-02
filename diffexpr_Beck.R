@@ -21,11 +21,11 @@ setwd("~/Work/1_Milk/DilutionEffect/DE-Genes/")
 
 nonlac = loadCounts(pflist, n = 6, computeMean=FALSE) # n = number of replicates
 lac    = loadCounts(lflist, n = 6, computeMean=FALSE)
-countTable = merge.data.frame(nonlac, lac)
+countTable = cbind(nonlac[,-1], lac[,-1])
 
-#### rownames(countsTable) <- p_rep1$GeneID # may need to change geneid from being the first column to instead being the rownames
-#newdf = df[],2:8]
-#row.names(newdf) = df[,1]
+countTable = sapply(countTable[, c(1:ncol(countTable))], as.numeric)
+
+row.names(countTable) = lac[,1]
 
 # Describe the conditions (i.e. treatment vs non-treatment) of each sample
 cond = factor(c(rep("prepuberty", 6), rep("lactation", 6))) # number indicated is the number of replicates in each treatment group
@@ -33,7 +33,7 @@ cond = factor(c(rep("prepuberty", 6), rep("lactation", 6))) # number indicated i
 ## DESeq ##
 
 # Create a CountDataSet which is the central data structure in DESeq
-cds = newCountDataSet(countsTable, cond)
+cds = newCountDataSet(countTable, cond)
 
 # Estimate effective library size
 cds = estimateSizeFactors(cds)
