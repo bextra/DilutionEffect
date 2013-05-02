@@ -59,10 +59,11 @@ computeDEgenes =
         res.filtered = res[which((abs(res$adjLog2FoldChange) > 1) & (res$padj < 0.05 | is.na(res$padj))),]
         
         # order transcripts by highest fold change
-        res.ordered <- res.filtered[order(res.filtered$adjLog2FoldChange, decreasing=TRUE),]
+        res.ordered = res.filtered[order(res.filtered$adjLog2FoldChange, decreasing=TRUE),]
+        
+        cat(nrow(res.ordered), "differentially expressed genes were found.\n")
         
         # save results to a file
-        cat("Making output file.\n")
         write.table(res.ordered, file=outputFile, quote=FALSE, row.names = FALSE, sep="\t")
         
     }
@@ -75,18 +76,53 @@ computeDEgenes =
 
 ### Source loadCounts function in exprCountsLoad.R
 # NOTE: this assumes all input files have been SORTED by geneID !!!!!!
-# List baseline/control condition *first* in the counts table and replicate number
+# List baseline/control condition *first* in the counts table
+# Therfore, adj log2 = 1.5 indicates an increase of 1.5 from condition1 to condition2
 
-
-# # # BOVINE # # #
+# # # BOVINE PRE-PUBERTY TO UN-ADJUSTED LACTATION # # #
 # Pre-puberty to lactation comparison of count data from Harhay et al.
-pflist = list.files("~/Work/1_Milk/DilutionEffect/DE-Genes/", pattern = "^p.+[1-6].txt") # list data files required - prepuberty
-lflist = list.files("~/Work/1_Milk/DilutionEffect/DE-Genes/", pattern = "^l.+A[1-6].txt") # ditto for adjusted set  - lactation
-setwd("~/Work/1_Milk/DilutionEffect/DE-Genes/") # change working directy to desired location for output
-nonlac = loadCounts(pflist, n = 6, computeMean=FALSE) # n = number of replicates
-lac    = loadCounts(lflist, n = 6, computeMean=FALSE)
+setwd("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj.-BovineFINAL/") # change working directory to input file location
+norm_Bt_pflist = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj.-BovineFINAL/", pattern = "^p.+[1-6].txt") # list data files required - prepuberty
+norm_Bt_lflist = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj.-BovineFINAL/", pattern = "^norm.+[1-6].txt") # unadjusted lactation
+nonlac = loadCounts(norm_Bt_pflist, nreps= 6, computeMean=FALSE)
+lac    = loadCounts(norm_Bt_lflist, nreps= 6, computeMean=FALSE)
+bovineUnadjusted = combineSamples(nonlac, lac)
+computeDEgenes(bovineUnadjusted, outputFile="~/Work/1_Milk/DilutionEffect/DE-Genes/Bt_norm_DEgenes.txt")
+
+
+
+# # # BOVINE PRE-PUBERTY TO ADJUSTED LACTATION # # #
+# Pre-puberty to lactation comparison of count data from Harhay et al.
+norm_Bt_pflist = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj.-BovineFINAL/", pattern = "^p.+[1-6].txt") # list data files required - prepuberty
+adj_Bt_lflist  = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj.-BovineFINAL/", pattern = "^adj.+[1-6].txt") # dilution adjusted lactation
+nonlac = loadCounts(norm_Bt_pflist, nreps = 6, computeMean=FALSE)
+lac    = loadCounts(adj_Bt_lflist,  nreps = 6, computeMean=FALSE)
 bovineAdjusted = combineSamples(nonlac, lac)
+computeDEgenes(bovineAdjusted, outputFile="~/Work/1_Milk/DilutionEffect/DE-Genes/Bt_adj_DEgenes.txt")
 
-computeDEgenes(bovineAdjusted, outputFile="./atyourmamasfile2.txt")
 
 
+# # # HUMAN COLOSTRUM TO UN-ADJUSTED MATURE LACTATION # # #
+# Colostrum to mature lactation comparison of FPKM data from Nommsen-Rivers transcriptome manuscript
+## NOTE: Prior to loading files replace header line from bottom of sort back to top of file where header should be
+## NOTE: Prior to loading files replace header line from bottom of sort back to top of file where header should be
+setwd("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj.-HumanFINAL/") # change working directory to input file location
+norm_Hs_cflist = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj.-HumanFINAL/", pattern = "^Col.+[1-2].txt")   # list data files required - colostrum
+norm_Hs_mflist = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj.-HumanFINAL/", pattern = "^norm.+[1-6].txt")  # ditto for unadjusted set - mature
+colostrum = loadCounts(norm_Hs_cflist, nreps = 2, computeMean=FALSE)
+mature    = loadCounts(norm_Hs_mflist, nreps = 6, computeMean=FALSE)
+humanUnadjusted = combineSamples(colostrum, mature)
+computeDEgenes(humanUnadjusted, repsCondition1= 2, repsCondition2= 6, outputFile="~/Work/1_Milk/DilutionEffect/DE-Genes/Hs_norm_DEgenes.txt")
+
+
+
+# # # HUMAN COLOSTRUM TO ADJUSTED MATURE LACTATION # # #
+# Colostrum to mature lactation comparison of FPKM data from Nommsen-Rivers transcriptome manuscript
+## NOTE: Prior to loading files replace header line from bottom of sort back to top of file where header should be
+## NOTE: Prior to loading files replace header line from bottom of sort back to top of file where header should be
+norm_Hs_cflist = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj.-HumanFINAL/", pattern = "^Col.+[1-2].txt") # list data files required - colostrum
+adj_Hs_mflist  = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj.-HumanFINAL/", pattern = "^adj.+[1-6].txt") # ditto for adjusted set   - mature
+colostrum = loadCounts(norm_Hs_cflist, nreps = 2, computeMean=FALSE)
+mature    = loadCounts(adj_Hs_mflist,  nreps = 6, computeMean=FALSE)
+humanAdjusted = combineSamples(colostrum, mature)
+computeDEgenes(humanAdjusted, repsCondition1= 2, repsCondition2= 6, outputFile="~/Work/1_Milk/DilutionEffect/DE-Genes/Hs_adj_DEgenes.txt")
