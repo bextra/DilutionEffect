@@ -18,24 +18,26 @@ quickRowMean =
 # Function takes a list of files that you want to make a data frame with
 # Returns the data frame with the expression averaged across the rows
 loadCounts = 
-    function (flist, n, computeMean = TRUE) {
+    function (flist, nreps, computeMean = TRUE) {
         # Usage: loadCounts(<filelist>, <number of replicates>)
         
         countsList = sapply(flist, read.table)
         
-        # Check point to make sure data loaded correctly
+        # Label row contents in list matrix
         row.names(countsList) = c("GeneID", "RawCounts")
-        colnames(countsList)
         
         # Make a vector of the cleaned up file names to use as df headers
         headers = gsub("(.txt)", "", colnames(countsList), perl = TRUE)
         
+        
+        ngenes = length(unlist(countsList[2,1]))
+        
         # Get the gene IDs
-        GeneIDs = matrix(unlist(countsList["GeneID", ]), nrow = 15768, ncol = n) # get all of SORTED gene ids
+        GeneIDs = matrix(unlist(countsList["GeneID", ]), nrow = ngenes, ncol = nreps) # get all of SORTED gene ids
         GeneIDs = GeneIDs[-1,1] # fix the header and just take one of the gene lists
         
         # Get the expression counts for each file
-        ExpressionCounts = data.frame(matrix(unlist(countsList["RawCounts", ]), nrow = 15768, ncol = n), row.names = NULL, stringsAsFactors=FALSE)
+        ExpressionCounts = data.frame(matrix(unlist(countsList["RawCounts", ]), nrow = ngenes, ncol = nreps), row.names = NULL, stringsAsFactors=FALSE)
         ExpressionCounts = droplevels.data.frame(ExpressionCounts[-1,], row.names=NULL, stringsAsFactors=FALSE)
         names(ExpressionCounts) = headers
         
