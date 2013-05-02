@@ -11,28 +11,21 @@
 library(DESeq) # Load required package
 
 
-
-# Create a table of counts
-# NOTE: this assumes all input files have been SORTED by geneID !!!!!!
-# NOTE: this assumes all input files have been SORTED by geneID !!!!!!
-pflist = list.files("~/Work/1_Milk/DilutionEffect/DE-Genes/", pattern = "^p.+[1-6].txt") # Get a list of the data files required
-lflist = list.files("~/Work/1_Milk/DilutionEffect/DE-Genes/", pattern = "^l.+A[1-6].txt") # adjusted
-setwd("~/Work/1_Milk/DilutionEffect/DE-Genes/")
-nonlac = loadCounts(pflist, n = 6, computeMean=FALSE) # n = number of replicates
-lac    = loadCounts(lflist, n = 6, computeMean=FALSE)
-milkTable = cbind(nonlac[,-1], lac[,-1])
-milkTable = sapply(milkTable[, c(1:ncol(milkTable))], as.numeric)
-row.names(milkTable) = lac[,1]
-
-computeDEgenes(milkTable, outputFile="./atyourmamasfile.txt")
-
-# Data structure should be columns of one sample condition bound to columns of another sample condition
-
 # # # # # # # # # # # # # # # # # 
 #
 # Functions 
 #
 # # # # # # # # # # # # # # # # #
+combineSamples = 
+    function (data1, data2) {
+        # assumes gene IDs listed in first column followed by corresponding gene expression data, one replicate per column  
+        # assumes both dataframes are sorted by gene ID
+        myTable = cbind(data1[,-1], data2[,-1])
+        myTable = sapply(myTable[, c(1:ncol(myTable))], as.numeric)
+        row.names(myTable) = data1[,1]        
+        return(myTable)
+    }
+
 
 ## DESeq ##
 computeDEgenes =
@@ -73,4 +66,27 @@ computeDEgenes =
         write.table(res.ordered, file=outputFile, quote=FALSE, row.names = FALSE, sep="\t")
         
     }
+
+# # # # # # # # # # # # # # # # # # # # # # # # 
+#
+# Compute differentially expressed genes 
+#
+# # # # # # # # # # # # # # # # # # # # # # # # 
+
+### Source loadCounts function in exprCountsLoad.R
+# NOTE: this assumes all input files have been SORTED by geneID !!!!!!
+# List baseline/control condition *first* in the counts table and replicate number
+
+
+# # # BOVINE # # #
+# Pre-puberty to lactation comparison of count data from Harhay et al.
+pflist = list.files("~/Work/1_Milk/DilutionEffect/DE-Genes/", pattern = "^p.+[1-6].txt") # list data files required - prepuberty
+lflist = list.files("~/Work/1_Milk/DilutionEffect/DE-Genes/", pattern = "^l.+A[1-6].txt") # ditto for adjusted set  - lactation
+setwd("~/Work/1_Milk/DilutionEffect/DE-Genes/") # change working directy to desired location for output
+nonlac = loadCounts(pflist, n = 6, computeMean=FALSE) # n = number of replicates
+lac    = loadCounts(lflist, n = 6, computeMean=FALSE)
+bovineAdjusted = combineSamples(nonlac, lac)
+
+computeDEgenes(bovineAdjusted, outputFile="./atyourmamasfile2.txt")
+
 
