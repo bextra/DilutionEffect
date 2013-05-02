@@ -82,7 +82,7 @@ computeDEgenes =
 # # # BOVINE PRE-PUBERTY TO UN-ADJUSTED LACTATION # # #
 # Pre-puberty to lactation comparison of count data from Harhay et al.
 setwd("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj-BovineFINAL/") # change working directory to input file location
-norm_Bt_pflist = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj-BovineFINAL/", pattern = "^p.+[1-6].txt") # list data files required - prepuberty
+norm_Bt_pflist = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj-BovineFINAL/", pattern = "^psct_p.+[1-6].txt") # list data files required - prepuberty
 norm_Bt_lflist = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj-BovineFINAL/", pattern = "^norm.+[1-6].txt") # unadjusted lactation
 nonlac = loadCounts(norm_Bt_pflist, nreps= 6, computeMean=FALSE)
 lac    = loadCounts(norm_Bt_lflist, nreps= 6, computeMean=FALSE)
@@ -93,7 +93,7 @@ computeDEgenes(bovineUnadjusted, outputFile="~/Work/1_Milk/DilutionEffect/DE-Gen
 
 # # # BOVINE PRE-PUBERTY TO ADJUSTED LACTATION # # #
 # Pre-puberty to lactation comparison of count data from Harhay et al.
-norm_Bt_pflist = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj-BovineFINAL/", pattern = "^p.+[1-6].txt") # list data files required - prepuberty
+norm_Bt_pflist = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj-BovineFINAL/", pattern = "^psct_p.+[1-6].txt") # list data files required - prepuberty
 adj_Bt_lflist  = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj-BovineFINAL/", pattern = "^adj.+[1-6].txt") # dilution adjusted lactation
 nonlac = loadCounts(norm_Bt_pflist, nreps = 6, computeMean=FALSE)
 lac    = loadCounts(adj_Bt_lflist,  nreps = 6, computeMean=FALSE)
@@ -107,7 +107,7 @@ computeDEgenes(bovineAdjusted, outputFile="~/Work/1_Milk/DilutionEffect/DE-Genes
 ## NOTE: Prior to loading files replace header line from bottom of sort back to top of file where header should be
 ## NOTE: Prior to loading files replace header line from bottom of sort back to top of file where header should be
 setwd("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj-HumanFINAL/") # change working directory to input file location
-norm_Hs_cflist = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj-HumanFINAL/", pattern = "^Col.+[1-2].txt")   # list data files required - colostrum
+norm_Hs_cflist = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj-HumanFINAL/", pattern = "^psct_Col.+[1-2].txt")   # list data files required - colostrum
 norm_Hs_mflist = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj-HumanFINAL/", pattern = "^norm.+[1-6].txt")  # ditto for unadjusted set - mature
 colostrum = loadCounts(norm_Hs_cflist, nreps = 2, computeMean=FALSE)
 mature    = loadCounts(norm_Hs_mflist, nreps = 6, computeMean=FALSE)
@@ -120,7 +120,7 @@ computeDEgenes(humanUnadjusted, repsCondition1= 2, repsCondition2= 6, outputFile
 # Colostrum to mature lactation comparison of FPKM data from Nommsen-Rivers transcriptome manuscript
 ## NOTE: Prior to loading files replace header line from bottom of sort back to top of file where header should be
 ## NOTE: Prior to loading files replace header line from bottom of sort back to top of file where header should be
-norm_Hs_cflist = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj-HumanFINAL/", pattern = "^Col.+[1-2].txt") # list data files required - colostrum
+norm_Hs_cflist = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj-HumanFINAL/", pattern = "^psct_Col.+[1-2].txt") # list data files required - colostrum
 adj_Hs_mflist  = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj-HumanFINAL/", pattern = "^adj.+[1-6].txt") # ditto for adjusted set   - mature
 colostrum = loadCounts(norm_Hs_cflist, nreps = 2, computeMean=FALSE)
 mature    = loadCounts(adj_Hs_mflist,  nreps = 6, computeMean=FALSE)
