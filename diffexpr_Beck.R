@@ -18,13 +18,10 @@ library(DESeq) # Load required package
 pflist = list.files("~/Work/1_Milk/DilutionEffect/DE-Genes/", pattern = "^p.+[1-6].txt") # Get a list of the data files required
 lflist = list.files("~/Work/1_Milk/DilutionEffect/DE-Genes/", pattern = "^l.+A[1-6].txt") # adjusted
 setwd("~/Work/1_Milk/DilutionEffect/DE-Genes/")
-
 nonlac = loadCounts(pflist, n = 6, computeMean=FALSE) # n = number of replicates
 lac    = loadCounts(lflist, n = 6, computeMean=FALSE)
 countTable = cbind(nonlac[,-1], lac[,-1])
-
 countTable = sapply(countTable[, c(1:ncol(countTable))], as.numeric)
-
 row.names(countTable) = lac[,1]
 
 # Describe the conditions (i.e. treatment vs non-treatment) of each sample
