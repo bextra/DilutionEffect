@@ -38,15 +38,15 @@ sub run_dilution {
 	my ($reps, $path, $fileroot, @thresh) = @_;
 
 	for (my $i = 1; $i <= $reps; $i++) {
-		my $adj_file = "Adj_$fileroot$i.txt";
+		my $adj_file = "dilOUT_$fileroot$i.txt";
 		
 		`dilution_effect.pl -a $thresh[$i-1] $path/$fileroot$i.txt > $adj_file`;
 		`pseudocounter.pl $adj_file > pseuct_$adj_file`;
 		
 		my $final_file = "$fileroot$i.txt";
 		
-		`sort $adj_file | cut -f 1,2 > norm_$final_file`;
-		`sort $adj_file | cut -f 1,3 > adjusted_$final_file`;
+		`sort pseuct_$adj_file | cut -f 1,2 > norm_$final_file`;
+		`sort pseuct_$adj_file | cut -f 1,3 > adj_$final_file`;
 		
 		`rm $adj_file`;
 		`rm pseuct_$adj_file`;
