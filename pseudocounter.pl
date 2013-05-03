@@ -15,11 +15,12 @@ print $header;
 my $line;
 while ($line = <>) {
 	my ($gene, $raw_freq, $adj_freq) = split(/\s+/, $line);	
-	if ($filename =~ m/lcounts/i) {
+	if ($filename =~ m/(lcounts)|(Mature)/i) {
 		$raw_freq = $raw_freq + 1;
-		# $adj_freq = $adj_freq + 1; # uncomment for three columned file
-		print "$gene\t$raw_freq\n";
-		# print "$gene\t$raw_freq\t$adj_freq\n"; #uncomment for three columned file
+		$adj_freq = $adj_freq + 1; # uncomment for three columned file
+		
+		#print "$gene\t$raw_freq\n"; # uncomment for 2 columned file
+		print "$gene\t$raw_freq\t$adj_freq\n"; #uncomment for 3 columned file
 	} 
 	else {
 		$raw_freq = $raw_freq + 1;
