@@ -20,7 +20,7 @@ setwd("~/Work/1_Milk/DilutionEffect/DAVID-GO-Input/1_Pre-processing/BtHomologCon
 ########################################################################
 selectBestOrtholog =
     function (annot) {
-        names(annot) <- c("EnsID", "EnsTransID", "Description", "X.Identity", "Homology.Type", "Human.EnsID") # rename columns for easier handling
+        names(annot) <- c("EnsID", "EnsTransID", "X.Identity", "Homology.Type", "Human.EnsID") # rename columns for easier handling
         
         annot.one2one = data.frame(annot[which((annot$Homology.Type=="ortholog_one2one")|(annot$Homology.Type == "apparent_ortholog_one2one")), ], row.names=NULL)
         annot.many = data.frame(annot[which((annot$Homology.Type=="ortholog_many2many") | (annot$Homology.Type == "ortholog_one2many")), ], row.names=NULL)
@@ -114,3 +114,8 @@ write.table(unique(prepub500HomologsREF$Human.EnsID), file = "prepub500homologs.
 
 #### The problem may be that a very small portion of the most abundant bovine genes are mapping to human homologs and 
 #### therefore the GO data is missing the most important upgregulated and highly expressed transcripts
+
+
+
+### Switchers - newly upregulated after adjustment ###
+runRefPred(ref.file="OL-upAdj_uniqueREF.txt", pred.file="OL-upAdj_uniquePRED.txt", export.file="Homologs-upAdj_unique.txt")
