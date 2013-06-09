@@ -57,7 +57,7 @@ computeDEgenes =
         # get transcripts with an adjusted log2FoldChange of greater than 1 or 
         # less than -1 and with an adjusted p-value < 0.05
         res.filtered = res[which((abs(res$adjLog2FoldChange) > 1) & (res$padj < 0.05 | is.na(res$padj))),] # default settings
-        # res.filtered = res # use this line to get all genes and their DE values
+        #res.filtered = res # use this line to get all genes and their DE values
         
         # order transcripts by highest fold change
         res.ordered = res.filtered[order(res.filtered$adjLog2FoldChange, decreasing=TRUE),]
@@ -155,3 +155,22 @@ humanUnadjusted = combineSamples(colostrum, mature)
 computeDEgenes(humanUnadjusted, repsCondition1= 2, repsCondition2= 6, outputFile="~/Work/1_Milk/DilutionEffect/DE-Genes/Human-FINAL/Hs_norm_DEgenes60K.txt")
 
 
+# # # BOVINE PRE-PUBERTY TO ADJUSTED LACTATION # # #
+# Pre-puberty to lactation comparison of count data from Harhay et al.
+norm_Bt_pflist = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj-BovineFINAL/", pattern = "^psct_p.+[1-6].txt") # list data files required - prepuberty
+adj_Bt_lflist  = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj-BovineFINAL/", pattern = "^adj.+[1-6].txt") # dilution adjusted lactation
+nonlac = loadCounts(norm_Bt_pflist, nreps = 6, computeMean=FALSE)
+lac    = loadCounts(adj_Bt_lflist,  nreps = 6, computeMean=FALSE)
+bovineAdjusted = combineSamples(nonlac, lac)
+computeDEgenes(bovineAdjusted, outputFile="~/Work/1_Milk/DilutionEffect/DE-Genes/Bt_adj_DEgenes16K.txt")
+
+# # # HUMAN COLOSTRUM TO ADJUSTED MATURE LACTATION # # #
+# Colostrum to mature lactation comparison of FPKM data from Nommsen-Rivers transcriptome manuscript
+## NOTE: Prior to loading files replace header line from bottom of sort back to top of file where header should be
+## NOTE: Prior to loading files replace header line from bottom of sort back to top of file where header should be
+norm_Hs_cflist = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj-HumanFINAL/", pattern = "^psct_Col.+[1-2].txt") # list data files required - colostrum
+adj_Hs_mflist  = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj-HumanFINAL/", pattern = "^adj.+[1-6].txt") # ditto for adjusted set   - mature
+colostrum = loadCounts(norm_Hs_cflist, nreps = 2, computeMean=FALSE)
+mature    = loadCounts(adj_Hs_mflist,  nreps = 6, computeMean=FALSE)
+humanAdjusted = combineSamples(colostrum, mature)
+computeDEgenes(humanAdjusted, repsCondition1= 2, repsCondition2= 6, outputFile="~/Work/1_Milk/DilutionEffect/DE-Genes/Hs_adj_DEgenes60K.txt")
