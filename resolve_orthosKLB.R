@@ -98,8 +98,6 @@ runRefPred(ref.file="OLadj_upallREF.txt", pred.file="OLadj_upallPRED.txt", expor
 runRefPred(ref.file="OLnorm_downallREF.txt", pred.file="OLnorm_downallPRED.txt", export.file="../../BovineQuantThresh-FINAL/HumanHomologs/normdownallHsHomologs.txt")
 runRefPred(ref.file="OLnorm_upallREF.txt", pred.file="OLnorm_upallPRED.txt", export.file="../../BovineQuantThresh-FINAL/HumanHomologs/normupallHsHomologs.txt")
 
-
-
 #### Top 500 Expressed Genes ####
 adj500HomologsREF = selectBestOrtholog(annot= read.delim(file="OL-Top500AdjLacREF.txt", header=TRUE, sep="\t", row.names = NULL, stringsAsFactors = FALSE))
 write.table(unique(adj500HomologsREF$Human.EnsID), file = "adj500homologs.txt", sep="\t", row.names=FALSE, quote=FALSE)
