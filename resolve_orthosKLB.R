@@ -20,6 +20,7 @@ setwd("~/Work/1_Milk/DilutionEffect/DAVID-GO-Input/1_Pre-processing/BtHomologCon
 ########################################################################
 selectBestOrtholog =
     function (annot) {
+        # Change the below line to match the columns of the biomart output IN ORDER i.e. add in description or RefSeq IDs if you are using those instead
         names(annot) <- c("EnsID", "EnsTransID", "X.Identity", "Homology.Type", "Human.EnsID") # rename columns for easier handling
         
         annot.one2one = data.frame(annot[which((annot$Homology.Type=="ortholog_one2one")|(annot$Homology.Type == "apparent_ortholog_one2one")), ], row.names=NULL)
@@ -87,33 +88,38 @@ runRefPred = function(ref.file, pred.file, export.file) {
 ## Run on differentially expressed gene sets
 ## 
 ########################################################################
-# Background
-runRefPred(ref.file="OLBackgroundREF.txt", pred.file="OLBackgroundPRED.txt", export.file="../../BovineQuantThresh-FINAL/HumanHomologs/All16KHsHomologsEmsembl.txt")
-
-# Adjusted Up and Down
-runRefPred(ref.file="OLadj_downallREF.txt", pred.file="OLadj_downallPRED.txt", export.file="../../BovineQuantThresh-FINAL/HumanHomologs/adjdownallHsHomologs.txt")
-runRefPred(ref.file="OLadj_upallREF.txt", pred.file="OLadj_upallPRED.txt", export.file="../../BovineQuantThresh-FINAL/HumanHomologs/adjupallHsHomologs.txt")
-
-# Normal Up and Down
-runRefPred(ref.file="OLnorm_downallREF.txt", pred.file="OLnorm_downallPRED.txt", export.file="../../BovineQuantThresh-FINAL/HumanHomologs/normdownallHsHomologs.txt")
-runRefPred(ref.file="OLnorm_upallREF.txt", pred.file="OLnorm_upallPRED.txt", export.file="../../BovineQuantThresh-FINAL/HumanHomologs/normupallHsHomologs.txt")
+# # Background
+# runRefPred(ref.file="OLBackgroundREF.txt", pred.file="OLBackgroundPRED.txt", export.file="../../BovineQuantThresh-FINAL/HumanHomologs/All16KHsHomologsEmsembl.txt")
+# 
+# # Adjusted Up and Down
+# runRefPred(ref.file="OLadj_downallREF.txt", pred.file="OLadj_downallPRED.txt", export.file="../../BovineQuantThresh-FINAL/HumanHomologs/adjdownallHsHomologs.txt")
+# runRefPred(ref.file="OLadj_upallREF.txt", pred.file="OLadj_upallPRED.txt", export.file="../../BovineQuantThresh-FINAL/HumanHomologs/adjupallHsHomologs.txt")
+# 
+# # Normal Up and Down
+# runRefPred(ref.file="OLnorm_downallREF.txt", pred.file="OLnorm_downallPRED.txt", export.file="../../BovineQuantThresh-FINAL/HumanHomologs/normdownallHsHomologs.txt")
+# runRefPred(ref.file="OLnorm_upallREF.txt", pred.file="OLnorm_upallPRED.txt", export.file="../../BovineQuantThresh-FINAL/HumanHomologs/normupallHsHomologs.txt")
+# 
+# #### Top 500 Expressed Genes ####
+# adj500HomologsREF = selectBestOrtholog(annot= read.delim(file="OL-Top500AdjLacREF.txt", header=TRUE, sep="\t", row.names = NULL, stringsAsFactors = FALSE))
+# write.table(unique(adj500HomologsREF$Human.EnsID), file = "adj500homologs.txt", sep="\t", row.names=FALSE, quote=FALSE)
+# 
+# lac500HomologsREF = selectBestOrtholog(annot= read.delim(file="OL-Top500LacREF.txt", header=TRUE, sep="\t", row.names = NULL, stringsAsFactors = FALSE))
+# write.table(unique(lac500HomologsREF$Human.EnsID), file = "lac500homologs.txt", sep="\t", row.names=FALSE, quote=FALSE)
+# 
+# prepub500HomologsREF = selectBestOrtholog(annot= read.delim(file="OL-Top500PrepubREF.txt", header=TRUE, sep="\t", row.names = NULL, stringsAsFactors = FALSE))
+# write.table(unique(prepub500HomologsREF$Human.EnsID), file = "prepub500homologs.txt", sep="\t", row.names=FALSE, quote=FALSE)
+# 
+# # For predicted Ensembl gene IDs since there are so few add manually to gene lists before import to GO
+# 
+# #### The problem may be that a very small portion of the most abundant bovine genes are mapping to human homologs and 
+# #### therefore the GO data is missing the most important upgregulated and highly expressed transcripts
+# 
+# ### Switchers - newly upregulated after adjustment ###
+# runRefPred(ref.file="OL-upAdj_uniqueREF.txt", pred.file="OL-upAdj_uniquePRED.txt", export.file="Homologs-upAdj_unique.txt")
 
 #### Top 500 Expressed Genes ####
-adj500HomologsREF = selectBestOrtholog(annot= read.delim(file="OL-Top500AdjLacREF.txt", header=TRUE, sep="\t", row.names = NULL, stringsAsFactors = FALSE))
-write.table(unique(adj500HomologsREF$Human.EnsID), file = "adj500homologs.txt", sep="\t", row.names=FALSE, quote=FALSE)
+# runRefPred(ref.file="MouseOrthosRef.txt", pred.file="MouseOrthosPred.txt", export.file="collapsedMouseOrthologs.txt")
 
-lac500HomologsREF = selectBestOrtholog(annot= read.delim(file="OL-Top500LacREF.txt", header=TRUE, sep="\t", row.names = NULL, stringsAsFactors = FALSE))
-write.table(unique(lac500HomologsREF$Human.EnsID), file = "lac500homologs.txt", sep="\t", row.names=FALSE, quote=FALSE)
+# Non differentially expressed genes
+runRefPred(ref.file="OLunadj_nonDEgenesREF.txt", pred.file="OLunadj_nonDEgenesPRED.txt", export.file="OLunadj_nonDEgenesALL.txt")
 
-prepub500HomologsREF = selectBestOrtholog(annot= read.delim(file="OL-Top500PrepubREF.txt", header=TRUE, sep="\t", row.names = NULL, stringsAsFactors = FALSE))
-write.table(unique(prepub500HomologsREF$Human.EnsID), file = "prepub500homologs.txt", sep="\t", row.names=FALSE, quote=FALSE)
-
-# For predicted Ensembl gene IDs since there are so few add manually to gene lists before import to GO
-
-#### The problem may be that a very small portion of the most abundant bovine genes are mapping to human homologs and 
-#### therefore the GO data is missing the most important upgregulated and highly expressed transcripts
-
-
-
-### Switchers - newly upregulated after adjustment ###
-runRefPred(ref.file="OL-upAdj_uniqueREF.txt", pred.file="OL-upAdj_uniquePRED.txt", export.file="Homologs-upAdj_unique.txt")
