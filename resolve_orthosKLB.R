@@ -111,15 +111,19 @@ runRefPred = function(ref.file, pred.file, export.file) {
 # 
 # # For predicted Ensembl gene IDs since there are so few add manually to gene lists before import to GO
 # 
-# #### The problem may be that a very small portion of the most abundant bovine genes are mapping to human homologs and 
-# #### therefore the GO data is missing the most important upgregulated and highly expressed transcripts
+#### The problem may be that a very small portion of the most abundant bovine genes are mapping to human homologs and 
+#### therefore the GO data is missing the most important upgregulated and highly expressed transcripts
 # 
 # ### Switchers - newly upregulated after adjustment ###
 # runRefPred(ref.file="OL-upAdj_uniqueREF.txt", pred.file="OL-upAdj_uniquePRED.txt", export.file="Homologs-upAdj_unique.txt")
+# ### Switchers - newly downregulated to no change ###
+# runRefPred(ref.file="OLdownNorm_uniqueREF.txt", pred.file="OLdownNorm_uniquePRED.txt", export.file="OLdownNorm-uniqueALL.txt")
 
 #### Top 500 Expressed Genes ####
 # runRefPred(ref.file="MouseOrthosRef.txt", pred.file="MouseOrthosPred.txt", export.file="collapsedMouseOrthologs.txt")
 
 # Non differentially expressed genes
-runRefPred(ref.file="OLunadj_nonDEgenesREF.txt", pred.file="OLunadj_nonDEgenesPRED.txt", export.file="OLunadj_nonDEgenesALL.txt")
+# runRefPred(ref.file="OLunadj_nonDEgenesREF.txt", pred.file="OLunadj_nonDEgenesPRED.txt", export.file="OLunadj_nonDEgenesALL.txt")
 
+# Intersection of down regulated genes in norm or adj
+runRefPred(ref.file="OLintersection_downNormdownAdjREF.txt", pred.file="OLintersection_downNormdownAdjPRED.txt", export.file="OLintersection_downNormdownAdjALL.txt")
