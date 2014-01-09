@@ -1,8 +1,9 @@
 ## Dilution Effect Analysis Pipeline ver 1.0
 
 ## A. Author
-Kristen Beck
-PhD Candidate, UC Davis Genome Center
+Kristen Beck  
+PhD Candidate, [Korf Lab](www.korflab.ucdavis.edu) 
+UC Davis Genome Center  
 kristenbeck527[at]gmail[dot]com
 
 ## B. Objective
