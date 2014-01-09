@@ -1,6 +1,6 @@
 # quantileDetermination.R
 # K. Beck
-# Jan. 15, 2013
+
 
 # Overall Objective: Determine if dilution effect adjustment is necessary based on Kolmogorov-Smirnov test
 # and if so, calculate an appropriate threshold for high abundance genes. 
