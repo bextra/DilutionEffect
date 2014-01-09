@@ -1,7 +1,9 @@
 ## Dilution Effect Analysis Pipeline ver 1.0
 
 ## A. Author
-Kristen Beck (kristenbeck527[at]gmail[dot]com)
+Kristen Beck
+PhD Candidate, UC Davis Genome Center
+kristenbeck527[at]gmail[dot]com
 
 ## B. Objective
 Utilize this package to determine the quantitative threshold denoting high abundance transcripts in RNA-Seq data. Then using this data calculate and apply a dilution adjustment factor to gene expression values.
