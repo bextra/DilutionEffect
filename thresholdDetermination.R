@@ -2,7 +2,8 @@
 # K. Beck
 
 
-# Overall Objective: Determine if dilution effect adjustment is necessary based on Kolmogorov-Smirnov test
+# Objectives: 
+# 1. Determine if dilution effect adjustment is necessary based on Kolmogorov-Smirnov test
 # and if so, calculate an appropriate threshold for high abundance genes. 
 # The threshold determined is specific to each replicate and used as input for dilutioneffect.pl
 
