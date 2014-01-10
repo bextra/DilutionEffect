@@ -1,13 +1,33 @@
 # thresholdDetermination.R
 # K. Beck
+# PhD Candidate, UC Davis Genome Center
+# www.korflab.ucdavis.edu
 
 
-# Objectives: 
-# 1. Determine if dilution effect adjustment is necessary based on Kolmogorov-Smirnov test
-# and if so, calculate an appropriate threshold for high abundance genes. 
-# The threshold determined is specific to each replicate and used as input for dilutioneffect.pl
+## Objectives: ---------------------
+# 1. Determine if dilution effect adjustment is necessary based on Kolmogorov-Smirnov and Wilcox test
+# 2. If so, calculate an appropriate threshold for high abundance genes
+# Note: The threshold determined for each replicate and subsequently used as input for dilutioneffect.pl
 
-# Load data with exprCountsLoad.R
+# Load expression data ---------------------
+if (exists("state1") & exists("state2")) {
+    cat("File names specified in console.\n")
+} else {
+    args = commandArgs(trailingOnly=TRUE)
+    if(length(args) < 2) stop("Usage: Files undefined, please specify expression data from command line i.e.
+          $ Rscript thresholdDetermination.R <file1.txt> <file2.txt>")
+    state1 = args[1]
+    state2 = args[2]
+}
+cat(  "Expression data 1 specified: ", state1,
+      "\nExpression data 2 specified: ", state2, "\n")
+
+# read.table or die for both files
+
+stop("We're done\n")
+
+### TODO - make a third args and use that to allow people to set their own quantile down stream
+
 
 options(scipen= 10) # Set options
 
