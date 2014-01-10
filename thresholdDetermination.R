@@ -1,4 +1,4 @@
-# quantileDetermination.R
+# thresholdDetermination.R
 # K. Beck
 # Jan. 15, 2013
 
