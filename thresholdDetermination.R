@@ -9,70 +9,68 @@
 # 2. If so, calculate an appropriate threshold for high abundance genes
 # Note: The threshold determined for each replicate and subsequently used as input for dilutioneffect.pl
 
-# Load expression data ---------------------
-if (exists("state1") & exists("state2")) {
+## 0. Load expression data ---------------------
+# Check to see if files are declared on command line or console
+if (exists("file1") & exists("file2")) {
     cat("File names specified in console.\n")
 } else {
     args = commandArgs(trailingOnly=TRUE)
-    if(length(args) < 2) stop("Usage: Files undefined, please specify expression data from command line i.e.
-          $ Rscript thresholdDetermination.R <file1.txt> <file2.txt>")
-    state1 = args[1]
-    state2 = args[2]
+    if(length(args) < 2) stop("Usage: Files undefined, please specify expression data. 
+    If working from command line use
+          $ Rscript thresholdDetermination.R <file1.txt> <file2.txt>
+    If working in Rstudio console use
+          > file1 = \"<file1.txt>\"
+          > file2 = \"<file2.txt>\"" )
+    file1 = args[1]
+    file2 = args[2]
 }
-cat(  "Expression data 1 specified: ", state1,
-      "\nExpression data 2 specified: ", state2, "\n")
+cat(  "Expression data 1 specified: ", file1,
+      "\nExpression data 2 specified: ", file2, "\n")
 
-# read.table or die for both files
+expr1 = read.table(file1, stringsAsFactors=FALSE, header=TRUE)
+expr2 = read.table(file2, stringsAsFactors=FALSE, header=TRUE)
 
-stop("We're done\n")
-
+###
 ### TODO - make a third args and use that to allow people to set their own quantile down stream
+###
 
 
-options(scipen= 10) # Set options
-
-#### Step 1:  How similar are the distributions of non-lactating and lactating? ####
-## Determine the difference between distributions of both samples using statistical tests
-## If p < 0.05 in both Wilcoxon and KS test then you can confidently reject the null hypothesis and 
-## conclude that the distributions are different enough to warrant a dilution adjustment
+## 1. How similar are the distributions of two expression data sets? ---------------------
+# Determine the difference between distributions of both samples using statistical tests
+# If p < 0.05 in both Wilcoxon and KS test then you can confidently reject the null hypothesis and 
+# conclude that the distributions are different enough to warrant a dilution adjustment
 
 
-## Mann-Whitney-Wilcoxon Test
-# Null hypothesis: lactation stage 1 and lactating stage 2 are identical populations
-# if p < 0.05 we can reject the null hypothesis
-wilcox.test(x=NRcolostrum$mean,    y=NRmature$mean) # returns p < 2.2e-16
-wilcox.test(x=NRtransitional$mean, y=NRmature$mean) # returns p < 2.2e-16
-wilcox.test(x=NRcolostrum$mean,    y=NRtransitional$mean) # p-value = 0.01624 ....ask Danielle about this case???
-# therefore colostrum and mature are nonidentical populations
+# Mann-Whitney-Wilcoxon Test
+w = wilcox.test(x=expr1$mean, y=expr2$mean)
+# Null hypothesis: expression data from stage 1 and stage 2 are identical populations
+# if p < 0.05 we can reject the null hypothesis, i.e. the two samples are from nonidentical distributions
 # ref: http://www.r-tutor.com/elementary-statistics/non-parametric-methods/mann-whitney-wilcoxon-test
 
-# BUT WHAT ABOUT TRANSITIONAL AND COLOSTRUM????
-
-# Null hypothesis: non-lactating and lactating are identical populations
-# if p < 0.05 we can reject the null hypothesis
-wilcox.test(x=prepuberty$mean,     y=lactation$mean) # returns p < 2.2e-16
-# therefore non-lac and lac are nonidentical populations
-
-
-## Kolmogorov-Smirnov Tests ##
+# Kolmogorov-Smirnov Test
+k = ks.test(x=expr1$mean,     y=expr2$mean)
 # interpret p-value as above i.e. p-value < 0.05 means the two samples are from nonidentical distributions
-# D = K-S test statistic aka the maximum difference between the x & y cumulative distribution function
-ks.test(x=prepuberty$mean,     y=lactation$mean)      # p < 2.2e-16
-ks.test(x=NRcolostrum$mean,    y=NRmature$mean)       # p < 2.2e-16, D = 0.0738 therefore larger difference than transitional vs mature comparison
-ks.test(x=NRtransitional$mean, y=NRmature$mean)       # p < 2.2e-16, D = 0.0531
-ks.test(x=NRcolostrum$mean,    y=NRtransitional$mean) # p < 2.2e-16, D = 0.0308
-# http://stats.stackexchange.com/questions/40443/two-sample-one-sided-kolmogorov-smirnov-test-vs-one-sided-wilcoxon-mann-whitney
+# D = K-S test statistic aka the maximum difference between the x & y cumulative distribution function, higher value means larger difference
 
-# Plot two distributions 
-# zoomed in on more zeros in the mature milk sample
-plot(ecdf(NRcolostrum$mean), do.points = FALSE, verticals = TRUE, xlim = c(0,100000), ylim = c(0.6, 1))
-lines(ecdf(NRmature$mean), lty=3, col = "red", do.points=FALSE, verticals = TRUE, xlim = c(0,100000), ylim = c(0.6, 1))
+# Test if distributions are different
+if (k$p.value < 0.05 & w$p.value < 0.05) {
+    cat("Distributions are statistically different.\nProceeding to calculate threshold.\n")
+} else {
+    warning("Distributions are not statistically different and dilution adjustment is not required.\nWilcoxon Test p-value = ", w$p.value,
+        "\nKS Test p-value = ", k$p.value)
+    stop("Exiting script")
+}
+
+
+
 
 # # # # # # 
 # 
 # FUNCTIONS
 #
 # # # # # # 
+
+options(scipen= 10) # Remove scientific notation from output
 
 determineThreshold = 
     function (data, column = 2, q = 0.9995) {
