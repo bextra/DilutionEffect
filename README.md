@@ -1,10 +1,10 @@
 ## Dilution Effect Analysis Pipeline ver 1.0
 
 ## A. Author
-Kristen Beck  
+**Kristen Beck**  
 PhD Candidate, [Korf Lab](www.korflab.ucdavis.edu)  
 UC Davis Genome Center  
-kristenbeck527[at]gmail[dot]com
+kristenbeck527 [at] gmail [dot] com
 
 ## B. Objective
 Utilize this package to determine the quantitative threshold denoting high abundance transcripts in RNA-Seq data. Then using this data calculate and apply a dilution adjustment factor to gene expression values.
@@ -18,11 +18,13 @@ Utilize this package to determine the quantitative threshold denoting high abund
 
 ## D. Important notes
 1. Must be Unix based OS
+2. Download RStudio [here](http://www.rstudio.com). It will be your friend when running R scripts.
 
 ## E. Input
-Gene expression data in the following format:
+Gene expression data in the following format:  
 `Identifier<TAB>ExpressionValue`
 
+For example:  
 ```
 GeneID	Expr
 ENSG_00000003137	37
@@ -30,12 +32,16 @@ ENSG_00000002549	5329
 ENSG_00000003056	468
 
 ```
-Note: each replicate must be in it's own file
-	
+**Note:** Each replicate must be in it's own file
+
+## F. Detailed steps
 
 
 
-## Old instructions
+
+
+
+## Old instructions (don't look at me Swan)  
 1. Extract raw data from Danielle's files either as count (bovine) or FPKM (human)
 2. Get thresholds
 3. DilutionRerunner.pl
