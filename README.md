@@ -50,18 +50,26 @@ ENSG_00000003056	468
 ***Option 1:***  Use RStudio  
 i. Open `DilutionAdjModel.Rproj` in RStudio.  
 This will load all necessary R scripts and data files into a interactive GUI with a console where you can run the scripts.  
-	*Note:* `DilutionAdjModel.Rproj` is configured to run with sample data included in this repository. Update variables for each expression data set (file names as a character string) and quantile (floating point number) as desired for your experiments.  
+	*Note:* `DilutionAdjModel.Rproj` is configured to run with sample data included in this repository. Update variables for each expression data set (file names as a character string). 
 ii. Source script from console pane  
 ``> source(thresholdDetermination.R)``  
 	  
 ***Option 2:***  Use terminal  
 Run `thresholdDetermination.R` from the terminal with the following arguments:  
-``$ Rscript thresholdDetermination.R <file1.txt> <file2.txt> <quantile>``  
+``$ Rscript thresholdDetermination.R <file1.txt> <file2.txt>``  
 
 ###2. Write quantile into bash script  
 -Some stuff
 
 
+## H. Advanced
+### 1. Override default quantile value.  
+Quantile is set to 0.9995 by default to isolate only a small subset of genes with the highest expression values. For other data sets, a different quantile may be more appropriate. This can be accomplished from RStudio by storing a different floating point number before sourcing `thresholdDetermination.R` i.e.  
+``> quant = 0.9900 # or any desired number``  
+Alternatively, you can set this parameter from the command line.  
+``$ Rscript thresholdDetermination.R <file1.txt> <file2.txt> <quantile>``  
+
+### 2. Other stuff
 
 
 
