@@ -23,13 +23,11 @@ Utilize this package to determine the quantitative threshold denoting high abund
 ## E. Quick start
 
 
-
 ## F. Install this project
 Clone repository to directory of choice from Unix/Linux terminal  
 ``$ git clone https://github.com/kbeck527/DilutionEffect.git``  
+
 or Download ZIP of repository (link at right)
-
-
 
 ## F. Input
 Gene expression data in the following format:  
@@ -44,27 +42,23 @@ GeneID	Expr
 ENSG_00000003137	37
 ENSG_00000002549	5329
 ENSG_00000003056	468
-
 ```
 **Note:** Each replicate must be in it's own file
 
 ## G. Detailed steps
 1. Determine threshold to separate high abundance genes
-	- ***Option 1:*** Open DilutionAdjModel.Rproj in RStudo. This will load all necessary R scripts and data files into a interactive GUI with a console where you can run the scripts.
-	- ***Option 2:*** Run `thresholdDetermination.R` from the terminal 
+	-***Option 1:*** 
+		i. Open `DilutionAdjModel.Rproj` in RStudo. This will load all necessary R scripts and data files into a interactive GUI with a console where you can run the scripts.  
+		Note: `DilutionAdjModel.Rproj` is configured to run with sample data included in this repository. Update variables for each expression data set (file names as a character string) and quantile (floating point number) as desired for your experiments.
+		ii. Source
+		``> source(thresholdDetermination.R)``
+	-***Option 2:*** Run `thresholdDetermination.R` from the terminal with the following arguments
+	``$ Rscript thresholdDetermination.R <file1.txt> <file2.txt> <quantile>``
+2. Write quantile into bash script
+	-Some stuff
 
 
-1. From the command line: 
-```
-$ Rscript thresholdDetermination.R tmp1.txt tmp2.txt
-```
 
-From the console:
-```
-> file2 = "Data/AveragedMature.txt"
-> file1 = "Data/AveragedColostrum.txt"
-> source(thresholdDetermination.R)
-```
 
 
 ## Old instructions (don't look at me Swan)  
