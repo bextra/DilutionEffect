@@ -46,7 +46,10 @@ ENSG_00000003056	468
 **Note:** Each replicate must be in it's own file
 
 ## G. Detailed steps
+<<<<<<< HEAD
 ###1. Determine threshold to separate high abundance genes  
+=======
+#1. Determine threshold to separate high abundance genes  
 	***Option 1:***  
 	i. Open `DilutionAdjModel.Rproj` in RStudo.  
 	This will load all necessary R scripts and data files into a interactive GUI with a console where you can run the scripts.  
@@ -57,7 +60,10 @@ ENSG_00000003056	468
 	***Option 2:***  
 	Run `thresholdDetermination.R` from the terminal with the following arguments:  
 	``$ Rscript thresholdDetermination.R <file1.txt> <file2.txt> <quantile>``  
+<<<<<<< HEAD
 ###2. Write quantile into bash script  
+=======
+#2. Write quantile into bash script  
 	-Some stuff
 
 
