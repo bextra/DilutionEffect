@@ -31,18 +31,30 @@ determineThreshold =
         totalExpr = sum(tmp) # get total expression
         threshold = qq/totalExpr # calculate the threshold relating to the quantile
         
-        cat("There are", length(tmp[tmp > qq]), "high abundance genes.\n")
+        nHighAbundance = length(tmp[tmp > qq])
         highGenes = tmp[tmp > qq]
-        cat("The smallest of which is", min(highGenes), "\n")
+        lowestValHighAbundance = min(highGenes)
+        
         
         # Estimate the dilution adjustment
         aboveQuantile = sum(tmp[tmp > qq]) 
         adjFactor = 1/(1-(aboveQuantile/totalExpr))
-        cat("The estimated dilution adjustment is", adjFactor, "\n")
+        # cat("The estimated dilution adjustment is", adjFactor, "\n")
         
-        cat("The quantile determined threshold is", threshold, "\n")
+        # cat("The quantile determined threshold is", threshold, "\n")
         
-        return(threshold)
+        myVec = c(threshold, lowestValHighAbundance, nHighAbundance, adjFactor) ## TODO get this to export as a matrix or write to a file
+        return(myVec)
+    }
+
+
+generateThresholdObject =
+    function (data) {
+        threshBatch = data.frame(t(sapply(2:ncol(data), function(x) determineThreshold(data, column = x, q= q_defined))))
+        colnames(threshBatch) = c("Threshold", "ThresholdIndex", "nHighAbundanceGenes", "estAdjFactor")
+        rownames(threshBatch) = colnames(data)[2:ncol(data)]
+        
+        return(threshBatch)
     }
 
 
@@ -99,7 +111,7 @@ if (k$p.value < 0.05 & w$p.value < 0.05) {
 if (exists("q_defined")) {
     cat("Quantile specified in console.\n")
     if(is.numeric(q_defined) == FALSE) {
-        warning("q must be numeric\nPlease specify floating point number i.e. q = 0.9995\n")
+        warning("q_defined must be numeric\nPlease specify floating point number i.e. q_defined = 0.9995\n")
     }
 } else if (length(args) > 2) {
     q_defined = as.numeric(args[3])
@@ -111,7 +123,9 @@ if (exists("q_defined")) {
 
 
 
-#threshExpr1 = sapply(2:ncol(expr1), function(x) determineThreshold(expr1, column = x, q= q_defined))
-threshExpr2 = sapply(2:ncol(expr2), function(x) determineThreshold(expr2, column = x, q= q_defined))
-# These thresholds are input for dilution_effect.pl and correspond to each replicate
+thresholdsFile1 = generateThresholdObject(expr1)
+thresholdsFile2 = generateThresholdObject(expr2)
+
+write.table(thresholdsFile1, file="Results/thresholdsFile1.txt", sep = "\t", quote=FALSE, row.names=TRUE, col.names=TRUE)
+write.table(thresholdsFile2, file="Results/thresholdsFile2.txt", sep = "\t", quote=FALSE, row.names=TRUE, col.names=TRUE)
 
