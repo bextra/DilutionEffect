@@ -64,8 +64,8 @@ Run `thresholdDetermination.R` from the terminal with the following arguments:
 
 ## H. Advanced
 ### 1. Override default quantile value.  
-Quantile is set to 0.9995 by default to isolate only a small subset of genes with the highest expression values. For other data sets, a different quantile may be more appropriate. This can be accomplished from RStudio by storing a different floating point number before sourcing `thresholdDetermination.R` i.e.  
-``> quant = 0.9900 # or any desired number``  
+Quantile is set to 0.9995 by default to isolate only a small subset of genes with the highest expression values. For other data sets, a different quantile may be more appropriate. This can be accomplished from RStudio by storing a different floating point number in the variable `q_defined` before sourcing `thresholdDetermination.R` i.e.  
+``> q_defined = 0.9900 # or any desired number``  
 Alternatively, you can set this parameter from the command line.  
 ``$ Rscript thresholdDetermination.R <file1.txt> <file2.txt> <quantile>``  
 
