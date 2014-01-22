@@ -95,48 +95,23 @@ if (k$p.value < 0.05 & w$p.value < 0.05) {
 
 
 ## 1. Determine thresholds using quantile for top expression ---------------------
-threshExpr1 = sapply(2:ncol(expr1), function(x) determineThreshold(expr1, column = x, q= 0.9995))
-threshExpr2 = sapply(2:ncol(expr2), function(x) determineThreshold(expr2, column = x, q= 0.9995))
+# Check for user defined quantile
+if (exists("q_defined")) {
+    cat("Quantile specified in console.\n")
+    if(is.numeric(q_defined) == FALSE) {
+        warning("q must be numeric\nPlease specify floating point number i.e. q = 0.9995\n")
+    }
+} else if (length(args) > 2) {
+    q_defined = as.numeric(args[3])
+    cat("User defined quantile: ", q_defined, "\n")
+} else {
+    q_defined = 0.9995
+    cat("Using default quantile:", q_defined, "\n")
+}
+
+
+
+#threshExpr1 = sapply(2:ncol(expr1), function(x) determineThreshold(expr1, column = x, q= q_defined))
+threshExpr2 = sapply(2:ncol(expr2), function(x) determineThreshold(expr2, column = x, q= q_defined))
 # These thresholds are input for dilution_effect.pl and correspond to each replicate
 
-
-# # # # # # 
-# 
-# TESTING
-#
-# # # # # # 
-
-# TODO maybe report the high abundance genes for comparison between human lactation
-intersect(highGenesHs$GeneID, highGenesHsC$GeneID) # 11 shared high abundance genes between colostrum and mature
-
-
-########## Quantile and other statistics research ##########
-
-# Explore quantile values
-# returns the x value at this portion of the cumultive distribution curve
-# quantile(lactation$mean, probs = c(0.05, 0.95, 0.999, .999908, 1), names=TRUE) # cow
-# quantile(NRmature$mean, probs = c(0.05, 0.95, 0.999, .999908, 1), names=TRUE)  # human
-
-
-# Get just the p-value like this (or store the wilcoxon results in a variable and use the brackets after that)
-# wilcox.test(x=NRcolostrum$mean,    y=NRmature$mean)["p.value"] 
-# This needs m and n values, but how do you determine those?
-# plot(dwilcox(lactation$mean))
-
-
-# Description of statistical modeling
-# d = probability density values (pdf = probability distribution function)
-# returns height of the distribution curve at specified (input) x value(s)
-# in some functions you can specify the mean and sd to tailor it to your curve
-# otherwise it treats x as the z score
-# p = cumulative probabilities (cdf = cumulative distribution function)
-# returns the area below the curve up until the value specified
-# i.e. pnorm(1) returns the cumulative probabilities up until 1 in the curve specified
-# defaults to mean = 0 and sd = 1
-# to find the area above that point pnorm(1, lower.tail=FALSE)
-# q = quantile values
-# gives you quantiles or critical values
-# qnorm(0.95) # p = 0.05, one-tailed (upper) will return 1.644854
-# qnorm(0.95, mean = 5, sd =1) # can shift the curve to fit your data like so
-# r = random numbers from the distribution
-# ref: http://ww2.coastal.edu/kingw/statistics/R-tutorials/prob.html
