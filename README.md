@@ -30,8 +30,8 @@ or Download ZIP of repository (link at right)
 
 ## F. Input
 Gene expression data in the following format:  
-`Identifier<TAB>ExpressionValue<TAB>ExpressionValue`
-Each replicate is listed in a tab separated column.
+`Identifier<TAB>ExpressionValue<TAB>ExpressionValue`  
+
 For example:  
 ```
 GeneID	Rep1	Rep2	mean
@@ -39,7 +39,7 @@ GeneA	37		42		39.5
 GeneB	529		544		536.5
 GeneC	468		462		465
 ```
-**Note:** Final column with mean value across all replicates is required. The Mann-Whitney-Wilcoxon and Kolmogorov-Smirnov tests are completed using the mean expression value.
+**Note:** Final column with mean value across all replicates is required (must be named "mean" as well). The Mann-Whitney-Wilcoxon and Kolmogorov-Smirnov tests are completed using the mean expression value.
 
 ## G. Detailed steps
 ###1. Determine threshold to separate high abundance genes  
