@@ -11,17 +11,16 @@ Utilize this package to determine the quantitative threshold denoting high abund
 
 ## C. Pipeline overview
 
-1. Obtain expression data
-2. Determine threshold for high abundance genes
-3. Use threshold to calculate and apply dilution adjustment
-4. Optional: Run dilution adjustment on multiple files
+1. Determine threshold for high abundance genes from gene expression data
+2. Use threshold to calculate and apply dilution adjustment
+3. Optional: Run dilution adjustment on multiple files
 
 ## D. Important notes
 1. Must be Unix based OS
 2. Download RStudio [here](http://www.rstudio.com). It will be your friend when running R scripts.
 
 ## E. Quick start
-
+TODO add notes here
 
 ## F. Install this project
 Clone repository to directory of choice from Unix/Linux terminal  
@@ -38,12 +37,12 @@ Header required
 
 For example:  
 ```
-GeneID	Expr
-ENSG_00000003137	37
-ENSG_00000002549	5329
-ENSG_00000003056	468
+GeneID	Rep1	Rep2	mean
+ENSG_00000003137	37	42	39.5
+ENSG_00000002549	5329	5445	5387
+ENSG_00000003056	468	462	465
 ```
-**Note:** Each replicate must be in it's own file
+**Note:** Replicates can be combined in file. Final column with mean value across all replicates is required. The Mann-Whitney-Wilcoxon and Kolmogorov-Smirnov tests are completed on the mean expression value.
 
 ## G. Detailed steps
 ###1. Determine threshold to separate high abundance genes  
@@ -70,7 +69,7 @@ Alternatively, you can set this parameter from the command line.
 ``$ Rscript thresholdDetermination.R <file1.txt> <file2.txt> <quantile>``  
 
 ### 2. Other stuff
-
+Note sample data provided are human data described in the Beck et al. pubmed id. can be retrieved from the Gene Expression Omnibus at link <> using the GEO Series accession number GSE45669.
 
 
 ## Old instructions (don't look at me Swan)  
