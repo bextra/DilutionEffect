@@ -13,7 +13,7 @@ Utilize this package to determine the quantitative threshold denoting high abund
 
 1. Determine threshold for high abundance genes from gene expression data
 2. Use threshold to calculate and apply dilution adjustment
-3. Calculate differential expression
+
 
 ## D. Important notes
 1. Must be Unix based OS
@@ -61,7 +61,7 @@ Run `thresholdDetermination.R` from the terminal with the following arguments:
 
 ###2. Use quantile to get dilution adjustment factor
 Using the main input with all replicates in one file, run the following:
-``$ DilutionRerunner.pl <expression data> <threshold data> <n of reps>``
+``$ DilutionRerunner.pl <expression data> <threshold data> <n of reps>``  
 This step will run ``dilution_effect.pl`` to adjust the expression data based on the threshold provided from ``thresholdDetermination.R``. It will also prepare files for subsequent differential expression analysis. Algorithmic details of dilution adjustment are provided in publication.
 
 ###3. Some stuff
@@ -83,7 +83,7 @@ Note sample data provided are human data described in the Beck et al. pubmed id.
 1. Extract raw data from Danielle's files either as count (bovine) or FPKM (human)
 2. Get thresholds
 3. DilutionRerunner.pl
-	Runs dilution_effect.pl and pseduocounter.pl
+	Runs dilution_effect.pl and pseduocounter.pl - pseudocounter removed header
 	Splits file into two files of adjusted and unadjusted
 4. Manually move headers to top of file in human data (sorting put them at the bottom)
 4. Move dilution outputs to folders separated by species

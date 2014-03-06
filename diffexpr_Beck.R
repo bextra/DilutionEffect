@@ -1,11 +1,8 @@
-#########################################################################
 # diffexpr_Beck.R
-#
-# Adapted from diffexpr.R by D. Lemay 
-# updated 9/1/2013
-# R script to generate determine differentially expressed genes given raw
+# K. Beck
+
+# Objective: Determine differentially expressed genes given raw
 # count or FPKM data
-##########################################################################
 
 # Source loadCounts function in exprCountsLoad.R
 library(DESeq) # Load required package
