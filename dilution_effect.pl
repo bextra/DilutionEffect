@@ -3,8 +3,8 @@
 # K. Beck
 use strict; use warnings;
 use Getopt::Std;
-use vars qw ($opt_h $opt_v $opt_a $opt_d);
-getopts('hva:d');
+use vars qw ($opt_h $opt_v $opt_a);
+getopts('hva:');
 
 # # # # # # # # # #
 # 
@@ -19,14 +19,13 @@ print "Usage: dilution_effect.pl [options] <arguments...>
 	-v	version
 	-a	dilution-adjusted gene expression data file by expression level with
 		  specified threshold from command line i.e. -a 5 <file>
-	-d determine threshold for user
-	*NOTE: Gene IDs must be unique. Remove duplicates with dupbegone.pl if needed\n";
+	*NOTE: Gene IDs must be unique.\n";
 	exit;
 } elsif ($opt_v) {
 	print "Version: ", $VERSION, "\n"; 
 	exit;
-} elsif ((not defined ($opt_a)) & (not defined ($opt_d))) {
-	die "Please specify threshold method: adjust with specified threshold (-a) or determine threshold (-d)";
+} elsif (not defined ($opt_a)) {
+	die "Please specify threshold method: adjust with specified threshold (-a)";
 }
 
 my ($filename) = @ARGV; # renames ARGV
@@ -50,15 +49,6 @@ if ($opt_a) {
 	$threshold = $opt_a; # Renames threshold for easy calling
 	print STDERR "Specified threshold: $threshold\n";
 }
-
-# Determine threshold if option selected
-if ($opt_d) {
-	$threshold = determine_threshold();
-	print STDERR" The determined threshold is $threshold\n";
-}
-
-
-#exit; # move eventually
 
 # Adjust frequency of low abundance transcripts
 adjust_abundance();
@@ -151,39 +141,7 @@ sub adjust_abundance {
 	print STDERR "There were $highgenes high abundance genes\n";	
 }
 
-sub determine_threshold {
-	my $tmp;
-	
-	# Sort gene IDs in order based on expression value- largest to smallest
-	my @keys = sort { $genes_to_frequency{$b} <=> $genes_to_frequency{$a} } keys %genes_to_frequency;
-	
-	# Correct for data sets with odd number of genes
-	my $true_length = int((scalar @keys) / 2) * 2;
 
-	# Get the difference between the sorted expression values
-	for (my $i = 0; $i < $true_length; $i++) {
-		#print "$keys[$i]\t$genes_to_frequency{$keys[$i]}\n"; # checkpoint
- 		
- 		my $dif = $genes_to_frequency{$keys[$i]} - $genes_to_frequency{$keys[$i+1]};
- 		print "$i\t$keys[$i]\t$genes_to_frequency{$keys[$i]}\t$keys[$i+1]\t$genes_to_frequency{$keys[$i+1]}\t$dif\n";
-		
-		# TODO: now determine some way to pick the empirical threshold in between these
-
- 	}
- 	
-	# alternative sorting method
-	# 	foreach my $key (sort { $genes_to_frequency{$b} <=> $genes_to_frequency{$a} } keys %genes_to_frequency) {
-	# 		printf "%s\t%4d\n", $key, $genes_to_frequency{$key};
-	#		$dif = $tmp - $genes_to_frequency{$key}; # calculate dif
-	# 		$tmp = $genes_to_frequency{$key}; # reset
-	# 		
-	# 	}
-	#     
-
-	return(0.001);
-
-}
-__END__
 
 
 
