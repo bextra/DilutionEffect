@@ -18,46 +18,36 @@ my $reps = $ARGV[2];
 my $exprFileRoot = substr($exprFile, 0, -4); 
 
 # Separate the replicates into their own files
+print "Splitting $reps replicates into individual files.\n";
 for (my $i = 2; $i <= $reps + 1; $i++) {
-	print "$i\n";
 	my $rep_tmp = $i - 1;
 	`cut -f 1,$i $exprFile > $exprFileRoot$rep_tmp.txt`
 }
 
-## Process threshold file
-my $tmpCount = 0;
-while(<$exprFile>){
-	my $line = $_;
-	
-	
-	# qc does the header match the word "mean"
-	
-	# get the number of columns in the file
-	# wc for columns?
-	# split on tabs and then get total
-	# system call to cut first column and then looped over each column
-	
-	print $line;
-	$tmpCount++;
-	if ($tmpCount > 2) { die "fun's over sucker\n";}
-	
-}
-close $exprFile;
 
-__END__
 
-# Load threshold file1
-# skip the header
-# get the number of replicates $reps
-# get the thresholds as an array
 my @thresh;
+## Process threshold file
+my $count = 0;
 open(my $threshFile, "<$ARGV[1]") or die "error opening $ARGV[1] for reading\n";
-while (<$threshFile>){
+print "Retrieving threshold values.\n";
+while(<$threshFile>){
 	my $line = $_;
-	next if ($line =~ m/head/i);
+	next if ($line =~ m/Threshold/i); # skip the header
+
+	my @tmpArray = split(/\s+/, $line); # get the threshold value
+	push(@thresh, $tmpArray[1]);
 	
+	# count the thresholds seen and exit loop when all reps have been covered
+	$count++; 
+	if ($count == $reps) { last;} # exits while loop before using the threshold for the mean expression value
 }
 close $threshFile;
+
+# print array of thresholds if needed
+#for (my $i = 0; $i < scalar(@thresh); $i++) {
+#	print "$thresh[$i]\n";
+#}
 
 
 __END__
