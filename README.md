@@ -20,10 +20,7 @@ Utilize this package to determine the quantitative threshold denoting high abund
 2. Download RStudio [here](http://www.rstudio.com). It will be your friend when running R scripts.
 3. Store expression files in the Data directory
 
-## E. Quick start
-TODO add notes here
-
-## F. Install this project
+## E. Install this project
 Clone repository to directory of choice from Unix/Linux terminal  
 ``$ git clone https://github.com/kbeck527/DilutionEffect.git``  
 
@@ -63,10 +60,10 @@ Run `thresholdDetermination.R` from the terminal with the following arguments:
 Using the main input with all replicates in one file, run the following:
 ``$ DilutionRerunner.pl <expression data> <threshold data> <n of reps>``  
   
-This step will run ``dilution_effect.pl`` to adjust the expression data based on the threshold provided from ``thresholdDetermination.R``. It will also prepare files for subsequent differential expression analysis. Algorithmic details of dilution adjustment are provided in publication.
+This step runs ``dilution_effect.pl`` to adjust the expression data based on the threshold provided from ``thresholdDetermination.R`` on all replicates provided. Note: header is removed when pseudocounting to not interfere with sorting of gene names.
 
-###3. Some stuff
-
+**Algorithm description** The Dilution Adjustment Model uses the threshold provided to determine an index separating "high" and "low" abundance genes. Genes that are above the index are considered high abundance. Their expression values are summed and used in the calculation of the dilution adjustment factor (formula provided in publication).  The adjustment factor is then multiplied to low abundance genes to create the adjusted data set. The adjusted data set is then used for subsequent analysis i.e. a pairwise comparison to another physiological state or a comparison to the raw unadjusted expression data.  Further details and an application of this model are provided here:  
+Beck, K. et al. "Adjusting RNA-Seq data to account for the effect of highly abundant transcripts: a case study in milk production" BMC Bioinformatics. 2014 (submitted)
 
 
 ## H. Advanced
@@ -76,28 +73,5 @@ Quantile is set to 0.9995 by default to isolate only a small subset of genes wit
 Alternatively, you can set this parameter from the command line.  
 ``$ Rscript thresholdDetermination.R <file1.txt> <file2.txt> <quantile>``  
 
-### 2. Other stuff
-Note sample data provided are human data described in the Beck et al. pubmed id. can be retrieved from the Gene Expression Omnibus at link <> using the GEO Series accession number GSE45669.
 
-
-## Old instructions (don't look at me Swan)  
-1. Extract raw data from Danielle's files either as count (bovine) or FPKM (human)
-2. Get thresholds
-3. DilutionRerunner.pl
-	Runs dilution_effect.pl and pseduocounter.pl - pseudocounter removed header
-	Splits file into two files of adjusted and unadjusted
-4. Manually move headers to top of file in human data (sorting put them at the bottom)
-4. Move dilution outputs to folders separated by species
-5. Pseudocount baseline/control sample (prepuberty and colostrum)
-		pseudocounter.pl pcountsRep1.txt > psct_pcountsRep1.txt
-		pseudocounter.pl ColostrumRep2.txt > psct_ColostrumRep2.txt
-6. Move those to the corresponding species folders
-7. Run diffexpr_Beck.R on previously indicated folders
-8. Follow instructions in Preprocessing/README.txt
-	Split DE output into up or down regulated genes
-	Add header back to down regulated genes made by tail
-	This will be GO input
-9. Optional: Split files into unique up or down between adj and unadj
-	Analyze gene list
-	or put into GO analysis
 		
