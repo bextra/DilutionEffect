@@ -13,11 +13,12 @@ Utilize this package to determine the quantitative threshold denoting high abund
 
 1. Determine threshold for high abundance genes from gene expression data
 2. Use threshold to calculate and apply dilution adjustment
-3. Optional: Run dilution adjustment on multiple files
+3. Calculate differential expression
 
 ## D. Important notes
 1. Must be Unix based OS
 2. Download RStudio [here](http://www.rstudio.com). It will be your friend when running R scripts.
+3. Store expression files in the Data directory
 
 ## E. Quick start
 TODO add notes here
@@ -40,6 +41,7 @@ GeneB	529		544		536.5
 GeneC	468		462		465
 ```
 **Requirements:** 
+- Store expression data files in ``Data/``  
 - Final column with mean value across all replicates is required (must be named "mean" as well). The Mann-Whitney-Wilcoxon and Kolmogorov-Smirnov tests are completed using the mean expression value.
 - Gene IDs must identical and in the same order for both expression data sets.
 - Gene IDs may not be duplicated within a single expression data set.
@@ -55,15 +57,15 @@ ii. Source script from console pane
 	  
 ***Option 2:***  Use terminal  
 Run `thresholdDetermination.R` from the terminal with the following arguments:  
-``$ Rscript thresholdDetermination.R <file1.txt> <file2.txt>``  
+``$ Rscript thresholdDetermination.R <expressionData1.txt> <expressionData2.txt>``  
 
 ###2. Use quantile to get dilution adjustment factor
-For each data set run the following:
-``$ DilutionRerunner.pl <threshold file>``
+Using the main input with all replicates in one file, run the following:
+``$ DilutionRerunner.pl <expression data> <threshold data> <n of reps>``
+This step will run ``dilution_effect.pl`` to adjust the expression data based on the threshold provided from ``thresholdDetermination.R``. It will also prepare files for subsequent differential expression analysis. Algorithmic details of dilution adjustment are provided in publication.
 
+###3. Some stuff
 
-
--Some stuff
 
 
 ## H. Advanced
