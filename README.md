@@ -62,6 +62,7 @@ Run `thresholdDetermination.R` from the terminal with the following arguments:
 ###2. Use quantile to get dilution adjustment factor
 Using the main input with all replicates in one file, run the following:
 ``$ DilutionRerunner.pl <expression data> <threshold data> <n of reps>``  
+  
 This step will run ``dilution_effect.pl`` to adjust the expression data based on the threshold provided from ``thresholdDetermination.R``. It will also prepare files for subsequent differential expression analysis. Algorithmic details of dilution adjustment are provided in publication.
 
 ###3. Some stuff
