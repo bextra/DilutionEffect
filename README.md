@@ -39,7 +39,10 @@ GeneA	37		42		39.5
 GeneB	529		544		536.5
 GeneC	468		462		465
 ```
-**Note:** Final column with mean value across all replicates is required (must be named "mean" as well). The Mann-Whitney-Wilcoxon and Kolmogorov-Smirnov tests are completed using the mean expression value.
+**Requirements:** 
+- Final column with mean value across all replicates is required (must be named "mean" as well). The Mann-Whitney-Wilcoxon and Kolmogorov-Smirnov tests are completed using the mean expression value.
+- Gene IDs must identical and in the same order for both expression data sets.
+- Gene IDs may not be duplicated within a single expression data set.
 
 ## G. Detailed steps
 ###1. Determine threshold to separate high abundance genes  
@@ -54,7 +57,12 @@ ii. Source script from console pane
 Run `thresholdDetermination.R` from the terminal with the following arguments:  
 ``$ Rscript thresholdDetermination.R <file1.txt> <file2.txt>``  
 
-###2. Write quantile into bash script  
+###2. Use quantile to get dilution adjustment factor
+For each data set run the following:
+``$ DilutionRerunner.pl <threshold file>``
+
+
+
 -Some stuff
 
 

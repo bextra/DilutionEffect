@@ -9,7 +9,8 @@
 
 # Source loadCounts function in exprCountsLoad.R
 library(DESeq) # Load required package
-
+# TODO install package if it doesn't exist
+# http://stackoverflow.com/questions/15155814/check-if-r-package-is-installed-then-load-library
 
 # # # # # # # # # # # # # # # # # 
 #
@@ -94,6 +95,9 @@ computeDEgenes =
 # Therefore, adj log2 = 1.5 indicates an increase of 1.5 from condition1 to condition2
 
 # # # BOVINE PRE-PUBERTY TO UN-ADJUSTED LACTATION # # #
+
+##### TODODODODODODO - update file loading here for generalized file names , update nreps by length of list of file input
+
 # Pre-puberty to lactation comparison of count data from Harhay et al.
 setwd("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj-BovineFINAL/") # change working directory to input file location
 norm_Bt_pflist = list.files("~/Work/1_Milk/DilutionEffect/Dilution_Outputs/DilutionAdj-BovineFINAL/", pattern = "^psct_p.+[1-6].txt") # list data files required - prepuberty
