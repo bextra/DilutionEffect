@@ -42,7 +42,7 @@ GeneC	468		462		465
 - Gene IDs must identical and in the same order for both expression data sets.
 - Gene IDs may not be duplicated within a single expression data set.
 
-## G. Detailed steps
+## G. Steps to apply the Dilution Adjustment Model
 ###1. Determine threshold to separate high abundance genes  
 ***Option 1:***  Use RStudio  
 i. Open `DilutionAdjModel.Rproj` in RStudio.  
@@ -70,7 +70,7 @@ Beck, K. et al. "Adjusting RNA-Seq data to account for the effect of highly abun
 ## H. Advanced
 ### 1. Override default quantile value.  
 Quantile is set to 0.9995 by default to isolate only a small subset of genes with the highest expression values. For other data sets, a different quantile may be more appropriate.  
-This can be accomplished in RStudio by storing a different floating point number in the variable `q_defined` before sourcing `thresholdDetermination.R` i.e.  
+This can be accomplished in RStudio by storing a different floating point number in the variable `q_defined` before sourcing `thresholdDetermination.R`.   
 ``> q_defined = 0.9900 # or any desired number``  
   
 Alternatively, you can set this parameter from the command line.  
