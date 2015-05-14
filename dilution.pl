@@ -18,15 +18,16 @@ use Getopt::Long;
 #              Command-line options                  #
 ###################################################### 
 
-my ($quantile, $help, $verbose, $normalize) = (0.9995, undef, undef, undef);
+my ($quantile, $help, $verbose, $normalize, $keep_means) = (0.9995, undef, undef, undef, undef);
 
 my $usage = "
 $0 <counts file for condition A in TSV format> <counts file for condition B in TSV format>
 
 optional arguments:
-        --quantile  : quantile to determine 'high abundance' genes <default = $quantile>, range 0.0001–0.9999
-        --verbose   : turn on extra output (useful for debugging)
-        --normalize : for each replicate, normalize raw counts by total counts for that replicate <default = off>
+        --quantile   : quantile to determine 'high abundance' genes <default = $quantile>, range 0.0001–0.9999
+        --verbose    : turn on extra output (useful for debugging)
+        --normalize  : for each replicate, normalize raw counts by total counts for that replicate <default = off>
+        --keep_means : keep the intermediate files that contain mean expression across all replicates
         --help
 ";
 
@@ -34,7 +35,8 @@ GetOptions (
 	"quantile=f" => \$quantile,
 	"help"       => \$help,
 	"verbose"    => \$verbose,
-	"normalize"  => \$normalize
+	"normalize"  => \$normalize,
+	"keep_means" => \$keep_means
 );
 
 
@@ -96,8 +98,8 @@ my $command = "Rscript $R_script $counts_file_with_means_A $counts_file_with_mea
 system($command) && die "Can't run $command";
 
 # can now remove the temp files that contained mean values
-unlink($counts_file_with_means_A);
-unlink($counts_file_with_means_B);
+unlink($counts_file_with_means_A) unless ($keep_means);
+unlink($counts_file_with_means_B) unless ($keep_means);
 
 
 
@@ -129,7 +131,7 @@ sub process_counts_file{
 	# form output file name and trim any text/tsv file extension
 	my $output_file = $input_file;
 	$output_file =~ s/\.(txt|tsv|text)$//;
-	$output_file .= "_with_means.tsv";
+	$output_file .= "_mean_expression.tsv";
 
 	# will determine the number of replicates from the input file
 	my $number_of_replicates;
